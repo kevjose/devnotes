@@ -83,6 +83,7 @@ class LinkedList {
       currentNode = currentNode.nextElement;
     }
     currentNode.nextElement = tempNode;
+    this.length++;
   }
 
   search(val) {
@@ -299,7 +300,7 @@ function findMidBrute(list) {
   }
   let node = list.head;
   let mid = 0;
-  if (ByteLengthQueuingStrategy.length % 2 == 0) {
+  if (list.length % 2 == 0) {
     mid = list.length / 2;
   } else {
     mid = list.length / 2 + 1;
