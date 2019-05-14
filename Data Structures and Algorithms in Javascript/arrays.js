@@ -35,7 +35,7 @@ function removeEven2(arr) {
  * The spread opertator concats arr1 and arr2 while the sort() sorts the concatenated array -complexity nlogn because of sort()
  *
  * Solution 2: Start by new empty list.
- * Traverse bot lists and insert smaller value from arr1 or arr2 into the result list and increment that list index
+ * Traverse both lists and insert smaller value from arr1 or arr2 into the result list and increment that list index
  * If a list is completely traversed, while other one is left, then copy the remaining elements in result list
  * Complexity O(n+m)
  */
@@ -129,7 +129,7 @@ function findSum2(arr, value) {
   arr.sort((a, b) => a - b);
   var index;
   for (let j of arr) {
-    index = binarySearch(arr, value - arr);
+    index = binarySearch(arr, value - j);
     if (index) return [j, value - j];
   }
   return false;
@@ -205,7 +205,7 @@ function findProduct2(arr) {
     left = left * ele;
   }
   var right = 1;
-  for (let i = arr.length - 1; i > 1; i++) {
+  for (let i = arr.length - 1; i > 1; i--) {
     product[i] *= right;
     right *= arr[i];
   }
@@ -240,7 +240,7 @@ function findMinimum2(arr) {
 }
 
 /**
- * Given an array, find the first inteer which is unique in the array. Unique means the number does not repeat and appears only once in the whole array.
+ * Given an array, find the first integer which is unique in the array. Unique means the number does not repeat and appears only once in the whole array.
  *
  * Solution 1: start from the first element and traverse through the whole array comparing it with all the other elements to see if any is equal
  * if so skip to the next element and repeat. if not then it is the first unique element.

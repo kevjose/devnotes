@@ -83,6 +83,7 @@ class LinkedList {
       currentNode = currentNode.nextElement;
     }
     currentNode.nextElement = tempNode;
+    this.length++;
   }
 
   search(val) {
