@@ -237,3 +237,260 @@ function reverseList(list) {
   return list;
 }
 printList(reverseList(list));
+
+/**
+ * Detect loop in a linked list
+ *
+ * a loop is formed when a node in your linked list points to a previously traversed node.
+ * Solution 1: Using a Set/List, we iterate over the linked list and add each visited node to a list or set.
+ * Complexity: O(n)
+ *
+ * Solution 2: Floyd's cycle finding algorithm
+ * Fastest algorithm to detect loops in a linked list.
+ * track two iterators, onestep, twostep
+ * onestep moves one node at a time, while twostep iterates over two nodes.
+ * If a loop exists two iteratos will meet, when such condition is fulfilled, return true.
+ * Complexity: O(n) however runs twice as fast
+ */
+
+function detectLoopList(list) {
+  visitedNodes = [];
+  currentNode = list.head.nextElement;
+  while (currentNode != null) {
+    if (visitedNodes.includes(currentNode)) {
+      return true;
+    }
+    visitedNodes.push(currentNode);
+    currentNode = currentNode.nextElement;
+  }
+  return false;
+}
+
+function detectLoopFloydCycle(list) {
+  oneStep = list.head;
+  twoStep = list.head;
+  while (oneStep != null && twoStep != null && twoStep.nextElement != null) {
+    oneStep = oneStep.nextElement;
+    twoStep = twoStep.nextElement.nextElement;
+    if (oneStep == twoStep) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Find the middle value of a given linked list
+ *
+ * for even list middle = length/2 for odd, middle = length/2 +1
+ *
+ * Solution 1: Traverse whole list find its length, middle can be calculated by halving the length,
+ * then iterate till the middle
+ * Complexity: O(n)
+ *
+ * Solution 2: two pointer, fast pointer moves two steps until the end of the list, slow pointer moves one step
+ * when fast reached end the slow pointer will be at the middle
+ * Complexity: O(n)
+ *
+ */
+function findMidBrute(list) {
+  if (list.isEmpty()) {
+    return null;
+  }
+  let node = list.head;
+  let mid = 0;
+  if (ByteLengthQueuingStrategy.length % 2 == 0) {
+    mid = list.length / 2;
+  } else {
+    mid = list.length / 2 + 1;
+  }
+  for (i = 0; i < mid; i++) {
+    node = node.nextElement;
+  }
+  return node.data;
+}
+
+function findMidTwoPointer(list) {
+  if (list.isEmpty()) {
+    return null;
+  }
+  let currentNode = list.head.nextElement;
+  let midNode = currentNode;
+  currentNode = currentNode.nextElement.nextElement;
+  while (currentNode != null) {
+    midNode = midNode.nextElement;
+    currentNode = currentNode.nextElement;
+    if (currentNode != null) {
+      currentNode = currentNode.nextElement;
+    }
+  }
+  if (midNode != null) {
+    return midNode.data;
+  }
+  return null;
+}
+
+/**
+ * Remove duplicates from a linked list
+ *
+ * Solution 1: two loops outer and inner node compare each to see if duplicate exists, if duplicate found it is removed
+ * innerNode.nextElement = innerNode.nextElement.nextElement
+ * Complexity: O(n^2)
+ *
+ * Solution 2: Use Set, keep a track of visited nodes
+ * Complexity: O(n)
+ */
+
+function removeDupsLooped(list) {
+  if (list.isEmpty()) {
+    return null;
+  }
+  if (list.head.nextElement.nextElement == null) {
+    return list; // Only one element
+  }
+  let outerNode = list.head.nextElement;
+  while (outerNode != null) {
+    let innerNode = outerNode;
+    while (innerNode != null) {
+      if (
+        innerNode.nextElement != null &&
+        outerNode.data == innerNode.nextElement.data
+      ) {
+        innerNode = innerNode.nextElement.nextElement;
+      } else {
+        innerNode = innerNode.nextElement;
+      }
+    }
+    outerNode = outerNode.nextElement;
+  }
+  return list;
+}
+
+function removeDupsSet(list) {
+  let currentNode = list.head.nextElement;
+  let previousNode = list.head;
+  let visitedNodes = [];
+  if (!list.isEmpty() && currentNode.nextElement != null) {
+    while (currentNode != null) {
+      value = currentNode.data;
+      if (visitedNodes.includes(value)) {
+        previousNode.nextElement = currentNode.nextElement;
+        currentNode = currentNode.nextElement;
+        continue;
+      }
+      visitedNodes.push(currentNode.data);
+      previousNode = currentNode;
+      currentNode = currentNode.nextElement;
+    }
+  }
+  return list;
+}
+
+/**
+ * Union and intersection of linked lists
+ *
+ * Solution 1: traverse till the tail fo the first list and link it to the first node of the second list, remove dups
+ * Complexity: O(m+n), because of dups we need to traverse the whole union set.
+ *
+ * Solution 1:
+ *
+ */
+
+function union(list1, list2) {
+  if (list1.isEmpty()) {
+    return list2;
+  }
+  if (list2.isEmpty()) {
+    return list1;
+  }
+  let start = list.head.nextElement;
+  while (start.nextElement != null) {
+    start = start.nextElement;
+  }
+  start.nextElement = list2.head.nextElement;
+  list1.removeDupsSet();
+  return list1;
+}
+
+function intersection(list1, list2) {
+  let result = new LinkedList();
+  let visitedNodes = [];
+  let currentNode = list1.head.nextElement;
+
+  while (currentNode != null) {
+    let value = currentNode.data;
+    if (!visitedNodes.includes(value)) {
+      visitedNodes.push(value); //Visiting currentNode for first time
+    }
+    currentNode = currentNode.nextElement;
+  }
+
+  let start = list2.getHead().nextElement;
+  while (start != null) {
+    let val = start.data;
+    if (visitedNodes.includes(val)) {
+      result.insertAtTail(val);
+    }
+    start = start.nextElement;
+  }
+  result.removeDupsSet();
+  return result;
+}
+
+/**
+ * Return the Nth Node from the end
+ *
+ * Solution 1: Calculate the length of the linked list
+ * check if n is within the length
+ * find the position of the node using length -n+1
+ * iterate over the node and return value
+ * Complexity: O(n)
+ *
+ * Solution 2:
+ * Check if n is in the bounds of the list
+ * Move endNode forward n times and nthNode stays at the head
+ * Move pointers together now
+ * When endNode reaches the end the nthNode is on the Nth position from the end
+ * Complexity: O(n)
+ */
+
+function findNth(list, n) {
+  let len = list.length;
+  let nPos = len - n;
+  if (nPos < 0 || nPos > len) {
+    return -1;
+  }
+  let currentNode = list.head.nextElement;
+  let count = 0;
+  while (count < nPos && currentNode != null) {
+    currentNode = currentNode.nextElement;
+    count++;
+  }
+  if (currentNode != null) {
+    return currentNode.data;
+  }
+  return -1;
+}
+
+function findNth(list, n) {
+  let nthNode = list.head;
+  let endNode = list.head;
+  let count = 0;
+  if (!list.isEmpty()) {
+    while (count < n) {
+      if (endNode == null) {
+        return -1; // out of bounds
+      }
+      endNode = endNode.nextElement;
+      count++;
+    }
+  }
+  while (endNode != null) {
+    endNode = endNode.nextElement;
+    nthNode = nthNode.nextElement;
+  }
+  if (nthNode != null) {
+    return nthNode.data;
+  }
+  return -1;
+}
