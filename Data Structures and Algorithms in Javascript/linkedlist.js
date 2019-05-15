@@ -158,21 +158,24 @@ class LinkedList {
     return true;
   }
 }
+module.exports = {
+  LinkedList: LinkedList
+};
 
-let list = new LinkedList();
-for (i = 0; i < 10; i++) {
-  list = list.insertAtHead(i);
-}
-list.insertAtTail(100);
-list.insertAtTail(101);
-list.printList();
-list.search(90);
-list.search(101);
-console.log(list.searchRecursive(list.head, 99));
-list.deletionAtHead();
-list.printList();
-console.log(list.deleteByValue(list, 6));
-list.printList();
+// let list = new LinkedList();
+// for (i = 0; i < 10; i++) {
+//   list = list.insertAtHead(i);
+// }
+// list.insertAtTail(100);
+// list.insertAtTail(101);
+// list.printList();
+// list.search(90);
+// list.search(101);
+// console.log(list.searchRecursive(list.head, 99));
+// list.deletionAtHead();
+// list.printList();
+// console.log(list.deleteByValue(list, 6));
+// list.printList();
 
 /**
  * Tail Pointer in a linked list
@@ -200,7 +203,7 @@ function lengthOfList(list) {
   return length;
 }
 
-console.log(`Length of the list is ${lengthOfList(list)}`);
+// console.log(`Length of the list is ${lengthOfList(list)}`);
 
 /**
  * Given a linked list create function reverseList, which will reverse the given list
@@ -237,7 +240,7 @@ function reverseList(list) {
   list.head.nextElement = previousNode;
   return list;
 }
-printList(reverseList(list));
+// printList(reverseList(list));
 
 /**
  * Detect loop in a linked list

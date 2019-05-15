@@ -284,3 +284,8 @@ function isBalanced(exp) {
   }
   return true;
 }
+
+module.exports = {
+  Queue: Queue,
+  Stack: Stack
+};
