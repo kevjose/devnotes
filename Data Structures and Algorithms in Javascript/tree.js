@@ -118,6 +118,31 @@ class Node {
  * Repeat until we find the val or current becomes null
  */
 
+/**
+ * Deleting node from a BST
+ * To Delete a node search for it, once found, make it null by making its left or right child's parent null.
+ *
+ * Case 1:
+ * Deleting in an empty tree
+ * if the given starting node is null, do nothing and return false
+ *
+ * Case 2:
+ * Deleting a leaf node
+ * if the node to be deleted is a leaf node, remove the leaf node by making the parent's left or right child as null.
+ *
+ * Case 3:
+ * Deleting a node with one child
+ * search the node, check number of children, if only one, we check current nodes parent , as to if current node is left or right child
+ * accordingly we substitue current nodes child as the parents child.
+ *
+ * Case 4:
+ * From the node to be deleted,
+ * find the smallest node in the right subtree or the largest in the left subtree
+ * Replace the node to  be deleted with the node found.
+ * Finally delete the value that was replaced.
+ *
+ */
+
 class BinarySearchTree {
   constructor(rootValue) {
     this.root = new Node(rootValue);
@@ -218,4 +243,124 @@ class BinarySearchTree {
   searchRec(value) {
     return this.searchRecursiveHelper(this.root, value);
   }
+
+  delete(currentNode, value) {
+    if (currentNode == null) {
+      return false;
+    }
+
+    var parentNode;
+    while (currentNode && currentNode.val != value) {
+      parentNode = currentNode;
+      if (value < currentNode.val) {
+        currentNode = currentNode.leftChild;
+      } else {
+        currentNode = currentNode.rightChild;
+      }
+    }
+
+    if (currentNode === null) {
+      return false;
+    } else if (
+      currentNode.leftChild == null &&
+      currentNode.rightChild == null
+    ) {
+      if (currentNode.val == this.root.val) {
+        this.root = null;
+        return true;
+      } else if (currentNode.val < parentNode.val) {
+        parentNode.leftChild = null;
+        return true;
+      } else {
+        parentNode.rightChild = null;
+        return true;
+      }
+    } else if (currentNode.rightChild == null) {
+      if (currentNode.val == this.root.val) {
+        this.root = currentNode.leftChild;
+        return true;
+      } else if (currentNode.leftChild.val < parentNode.val) {
+        parentNode.leftChild = currentNode.leftChild;
+        return true;
+      } else {
+        parentNode.rightChild = currentNode.leftChild;
+        return true;
+      }
+    } else if (currentNode.leftChild == null) {
+      if (currentNode.val == this.root.val) {
+        this.root = currentNode.rightChild;
+        return true;
+      } else if (currentNode.rightChild.val < parentNode.val) {
+        parentNode.leftChild = currentNode.rightChild;
+        return true;
+      } else {
+        parentNode.rightChild = currentNode.rightChild;
+        return true;
+      }
+    } else {
+      var minRight = currentNode.rightChild;
+      while (minRight.leftChild !== null) {
+        minRight = minRight.leftChild;
+      }
+      var temp = minRight.val;
+      this.delete(this.root, minRight.val);
+      currentNode.val = temp;
+      return true;
+    }
+  }
 }
+
+/**
+ * Find Minimum value in a BST
+ *
+ * Solution: check if root is null, return null,
+ * keep traversing the left subtree as left will be smaller in the BST
+ * once the left most is reaced this is the min value
+ * Complexity: O(n)
+ */
+
+function findMinIter(rootNode) {
+  if (rootNode == null) {
+    return null;
+  }
+  while (rootNode.leftChild) {
+    rootNode = rootNode.leftChild;
+  }
+  return rootNode.val;
+}
+
+function findMinRec(rootNode) {
+  if (rootNode == null) {
+    return null;
+  } else if (rootNode.leftChild == null) {
+    return rootNode.val;
+  } else {
+    return findMinRec(rootNode.leftChild);
+  }
+}
+
+/**
+ * Find the kth maximum value in a BST
+ *
+ * Solution: Sort the tree in order and get the output as an array and kth max will be tree.length-k
+ * Complexity O(n)
+ */
+function inOrderTraversal(rootNode, tree) {
+  if (rootNode !== null) {
+    tree = inOrderTraversal(rootNode.leftChild, tree);
+    tree.push(rootNode.val);
+    tree = inOrderTraversal(rootNode.rightChild, tree);
+  }
+}
+function findKMax(rootNode, k) {
+  var tree = [];
+  tree = inOrderTraversal(rootNode, tree);
+  console.log(tree);
+  if (tree.length - k >= 0) {
+    return tree[tree.length - k];
+  }
+}
+
+/**
+ * Find ancestors of a given node in a binary tree
+ */
