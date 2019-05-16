@@ -363,4 +363,81 @@ function findKMax(rootNode, k) {
 
 /**
  * Find ancestors of a given node in a binary tree
+ *
+ * Solution: A recursive helper function which traverses from the root ato the input node and backtracks to append the
+ * ancestors that let to the node
+ * Complexity : O(n)
  */
+
+function findAncestors(rootNode, k) {
+  var result = [];
+  recFindAncestors(rootNode, k, result);
+  return result;
+}
+function recFindAncestors(rootNode, k, result) {
+  if (rootNode == null) {
+    return false;
+  } else if (rootNode.val == k) {
+    return true;
+  } else if (
+    recFindAncestors(rootNode.leftChild, k, result) ||
+    recFindAncestors(rootNode.rightChild, k, result)
+  ) {
+    result.push(rootNode.val);
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Find the height of the binary tree
+ *
+ * Height of a node - the number of edges between a node and its deepest decendants
+ * Height of a tree  - Height of its root node
+ *
+ * Solution: we return 0 if node is null,
+ * We call the function recursively on the left and right subtrees and return the one that has a greater value +1
+ *
+ * Complexity: O(n)
+ */
+
+function findHeight(rootNode) {
+  if (rootNode == null) {
+    return 0;
+  } else {
+    var leftHeight = findHeight(rootNode.leftChild);
+    var rightHeight = findHeight(rootNode.rightChild);
+    if (leftHeight > rightHeight) {
+      return leftHeight + 1;
+    } else {
+      return rightHeight + 1;
+    }
+  }
+}
+
+/**
+ * Find Nodes at distance k from the root
+ *
+ * Solution: maintain a counter k that is decremented until it is 0 or a leaf node is reached,
+ * return all the nodes encountered in the process
+ *
+ * Complexity : O(k)
+ */
+
+function findKNodes(rootNode, k) {
+  var result = [];
+  findKMax(rootNode, k, result);
+  return result;
+}
+
+function findK(rootNode, k, result) {
+  if (rootNode == null) {
+    return;
+  }
+  if (k == 0) {
+    result.push(rootNode.val);
+  } else {
+    findK(rootNode.leftChild, k, result);
+    findK(rootNode.rightChild, k, result);
+  }
+}
