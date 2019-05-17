@@ -38,6 +38,25 @@ class TrieNode {
   }
 }
 
+/**
+ * Word Insertion:
+ * For each character in the key, we check if it exists, at the position we desire.
+ * If character is not present then we insert the character at the correct inde in the children
+ * While inserting the last node, we also set value of isEndWord to true
+ *
+ * Case 1: No Common Prefix
+ * we want to insert a word whose characters are not common with any other node path.
+ *
+ *
+ * Case 2: Common Prefix:
+ * This occurs when a portion of the starting characters of your word already in the trie
+ * starting from the root node.
+ *
+ * Case 3: Word Exists:
+ * This occurs if your word is a substring of another word that already exists in the trie
+ *
+ */
+
 class Trie {
   constructor() {
     this.root = new TrieNode('');
@@ -45,4 +64,23 @@ class Trie {
   getIndex(t) {
     return t.charCodeAt(0) - 'a'.charCodeAt(0);
   }
+  insert(key) {
+    if (key == null) {
+      return;
+    }
+    key = key.toLowerCase();
+    let currentNode = this.root;
+    let index = 0;
+    for (let level = 0; level < key.length; level++) {
+      let index = this.getIndex(key[level]);
+      if (currentNode.children[index] == null) {
+        currentNode.children[index] = new TrieNode(key[level]);
+      }
+      currentNode = currentNode.children[index];
+    }
+    currentNode.markAsLeaf();
+  }
 }
+
+let t = new Trie();
+t.insert('abcdefghijklmnopqrstuvwxyz');
