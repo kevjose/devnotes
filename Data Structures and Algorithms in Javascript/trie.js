@@ -80,6 +80,25 @@ class Trie {
     }
     currentNode.markAsLeaf();
   }
+
+  search(key) {
+    if (key == null) {
+      return false;
+    }
+    key = key.toLowerCase();
+    let currentNode = this.root;
+    let index = 0;
+    for (let i = 0; i < key.length; i++) {
+      index = this.getIndex(key[i]);
+      if (currentNode.children[index] == null) {
+        return false;
+      }
+      currentNode = currentNode.children[index];
+    }
+    if (currentNode !== null && currentNode.isEndWord()) {
+      return true;
+    } else return false;
+  }
 }
 
 let t = new Trie();
