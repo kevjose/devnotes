@@ -283,3 +283,245 @@ ages[full.indexOf(true)];
 ages.findIndex(cur => return cur >=18); // return the index for which callback is true
 ages.find(cur =>  return cur >= 18); // retrieves the element instead if just the index
 ```
+
+#### the spread operator
+
+- convienient way to expand the array in place like args and funciton calls
+- ...arrayElem -> spreads and expands the array
+- more use case, to join arrays
+- the spread can be used on the nodeList as well
+
+```javascript
+function addAges(a, b, c, d) {
+  return a + b + c + d;
+}
+
+var sum1 = addAges(12, 12, 34, 23);
+
+// ES5
+var ages = [12, 12, 34, 23];
+var sum2 = addAges.apply(null, ages);
+
+// ES6
+const sum3 = addAges(...ages);
+const familySmith = ['John', 'Jane'];
+const familyMiller = ['Mark'];
+const bigFamily = [...familySmith, ...familyMiller];
+
+const h = document.querySelector('h1');
+const boxes = document.querySelectorAll('.box');
+const all = [h, ...boxes]; // Nodelist
+Array.from(all).forEach(cur => {
+  cur.style.color = 'purple';
+}); // returns an array
+```
+
+#### the rest operator
+
+- all about function params
+- rest operator allow to pass arbitary number of params to a function
+- these look exactly the same as spread operator but are different (uses the same notation)
+- spread takes an array and transforms to single values, rest takes couple of single values transforms to array when we call function with multiple params
+- difference between the spread and rest is majorily at the place where it is used, spread is used in the function call, whereas the rest is used in function decalaration where random number of args is used
+
+```javascript
+// ES5
+function isFullAge5() {
+  // use arguments variable to get n number of params
+  // console.log(arguments); // this is an object {'0':1990,'1':1992,'2':1994}
+  var argsArr = Array.prototype.slice.call(arguments);
+  argsArr.forEach(function(cur) {
+    console.log(2019 - cur >= 18);
+  });
+}
+isFullAge5(1990, 1992, 1994);
+isFullAge5(1990, 1992, 1994, 1986); // varibale number of args
+
+// ES6
+function isFullAge6(...years) {
+  // ...years will transform the args passed to an array
+  console.log(years); // this is now an array not like arguments object
+  year.forEach(cur => console.log(2019 - cur >= 18));
+}
+isFullAge6(1990, 1992, 1994);
+isFullAge6(1990, 1992, 1994, 1986);
+
+// ES5 fixed + arbitary params
+function isFullAge55(limit) {
+  // use arguments variable to get n number of params
+  // console.log(arguments); // this is an object {'0':1990,'1':1992,'2':1994}
+  var argsArr = Array.prototype.slice.call(arguments, 1);
+  argsArr.forEach(function(cur) {
+    console.log(2019 - cur >= limit);
+  });
+}
+
+// ES6 easier syntax in ES6
+function isFullAge66(limit, ...years) {
+  // ...years will transform the args passed to an array
+  console.log(years); // this is now an array not like arguments object
+  year.forEach(cur => console.log(2019 - cur >= limit));
+}
+```
+
+#### Default Parameters
+
+- we use these when function params needs to have a default value
+
+```javascript
+// ES5
+function SmithPerson(firstName, yearOfBirth, lastName) {
+  lastName === undefined ? (lastName = 'Smith') : (lastName = lastName);
+  this.firstName = firstName;
+  this.yearOfBirth = yearOfBirth;
+  this.lastName = lastName;
+}
+var john = new SmithPerson('John', 1990); // JS allows a function to be called without specifying all the params. JS assigns the usassigned params as undefined
+console.log(john); // SimthPerson > {firstName:'John', yearOfBirth: 1990, lastName:'Smith'} // lastName is Smith instead of undefined due to the conditional statement
+// if we specify the params in the function call this will overwrite the defaults
+
+// ES6
+function SmithPerson(firstName, yearOfBirth, lastName = 'Smith') {
+  this.firstName = firstName;
+  this.yearOfBirth = yearOfBirth;
+  this.lastName = lastName;
+}
+```
+
+#### Maps
+
+- new data structure
+- objects have been used as hash maps, use string keys mapped to arbitary values
+- in ES6 we can use maps,
+- object keys are restricted to strings in maps we can use any primitive type, functions as keys
+- maps can be loop'ed with forEach and for..of methods as well
+
+```javascript
+const question = new Map();
+question.set('question', 'What is lastest JS version name?');
+question.set(1, 'ES5'); // key does not have to be a string it can be any primitive
+question.set(2, 'ES6');
+question.set(3, 'ES2015');
+question.set(4, 'ES7');
+question.set('correct', 3);
+question.set(true, 'Correct answer :D');
+question.set(false, 'Wrong, please try again!');
+console.log(question.get('question'));
+//console.log(question.size); // size not length
+if (question.has(4)) {
+  // .has() checks if a key is there
+  //question.delete(4); // removes a key value by key
+  //console.log('Answer 4 is here')
+}
+//question.clear(); // removes all keys from map
+//question.forEach((value, key) => console.log(`This is ${key}, and it's set to ${value}`));
+for (let [key, value] of question.entries()) {
+  // another use case of destructuring [key, value] of question.entries()
+  if (typeof key === 'number') {
+    console.log(`Answer ${key}: ${value}`);
+  }
+}
+const ans = parseInt(prompt('Write the correct answer'));
+console.log(question.get(ans === question.get('correct')));
+```
+
+#### Classes
+
+- syntactic sugar over prototypal inheritance
+- in ES5 this is done via function constructor
+- static methods, attached to class but not inherited by class instances
+- unlike function constructors, class definitions are not hoisted
+- can add only methods to classes no properties
+
+```javascript
+// ES5
+var Person5 = function(name, yearOfBirth, job) {
+  this.name = name;
+  this.yearOfBirth = yearOfBirth;
+  this.job = job;
+};
+
+Person.prototype.calcAge = function() {
+  var age = new Date().getFullYear() - this.yearOfBirth;
+  console.log(age);
+};
+
+var john5 = new Person5('John', 1990, 'teacher');
+
+// ES6
+class Person6 {
+  constructor(name, yearOfBirth, job) {
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job;
+  }
+  calcAge() {
+    const age = new Date().getFullYear() - this.yearOfBirth;
+    console.log(age);
+  }
+  static greeting() {
+    console.log('Hello World');
+  }
+  // the static method can be used as helper function as className.methoName - Person.greeeting();
+}
+const john6 = new Person6('John', 1990, 'teacher');
+```
+
+#### classes and subclasses
+
+- inheriting one class to another
+
+```javascript
+//ES5
+var Person5 = function(name, yearOfBirth, job) {
+  this.name = name;
+  this.yearOfBirth = yearOfBirth;
+  this.job = job;
+};
+Person5.prototype.calculateAge = function() {
+  var age = new Date().getFullYear() - this.yearOfBirth;
+  console.log(age);
+};
+var Athlete5 = function(name, yearOfBirth, job, olymicGames, medals) {
+  Person5.call(this, name, yearOfBirth, job);
+  this.olymicGames = olymicGames;
+  this.medals = medals;
+};
+
+// the order of prototype assignment has to be in the order below else Object.create will try to overwrite the Athlete5.prototype existing methods
+Athlete5.prototype = Object.create(Person5.prototype);
+Athlete5.prototype.wonMedal = function() {
+  this.medals++;
+  console.log(this.medals);
+};
+var johnAthlete5 = new Athlete5('John', 1990, 'swimmer', 3, 10);
+johnAthlete5.calculateAge();
+johnAthlete5.wonMedal();
+//ES6
+class Person6 {
+  constructor(name, yearOfBirth, job) {
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job;
+  }
+  calculateAge() {
+    var age = new Date().getFullYear() - this.yearOfBirth;
+    console.log(age);
+  }
+}
+class Athlete6 extends Person6 {
+  constructor(name, yearOfBirth, job, olympicGames, medals) {
+    super(name, yearOfBirth, job);
+    this.olympicGames = olympicGames;
+    this.medals = medals;
+  }
+
+  wonMedal() {
+    this.medals++;
+    console.log(this.medals);
+  }
+}
+const johnAthlete6 = new Athlete6('John', 1990, 'swimmer', 3, 10);
+johnAthlete6.wonMedal();
+johnAthlete6.calculateAge();
+```
