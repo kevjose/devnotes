@@ -194,3 +194,92 @@ const box6 = {
 - the outer function is still required, if we use the arrow function here `this` will again point to the global window object
 
 #### Destructuring
+
+- gives us a easy way to extract data from data strtucture like objects and arrays
+- destructing makes it easy to return multiple value, usually we return object in case of ES5
+
+```javascript
+// ES5
+var john = ['John', 26];
+var name = john[0];
+var age = john[1];
+
+// ES6
+const [name6, year6] = ['John', 23];
+console.log(name6, year6);
+
+const obj = {
+  firstName: 'John',
+  lastName: 'Smith'
+};
+
+const { firstName, lastName } = obj; // the new variables have to match the key names
+// if we do not want key names to be same
+const { firstName: a, lastName: b } = obj;
+
+// destructing makes it easy to return multiple value, usually we return object in case of ES5
+function calcAgeRetirement(year) {
+  const age = new Date().getFullYear() - year;
+  return [age, 65 - age];
+}
+const [age, retirement] = calcAgeRetirement(1990);
+```
+
+#### Arrays in ES6
+
+- new methods and loop for arrays
+- Array.from
+- loop, normally forEach, map: problem no break, continue instead we have to used for loop in ES5
+- ES6 has for..of loop
+- ES5 has indexOf to find elements in Array
+- ES6 find and findIndex method
+
+```javascript
+const boxes = document.querySelectorAll('.box'); // return a nodeList
+// uses the trick to convert nodelist to array
+// ES5
+var boxesArr5 = Array.prototype.slice.call(boxes); // converts to array
+boxesArr5.forEach(function(cur) {
+  cur.style.backgroundColor = 'dodgerblue';
+});
+
+// ES6
+const boxesArray6 = Array.from(boxes); // instead of the prototype slice call hack
+boxesArray6.forEach(cur => {
+  cur.style.backgroundColor = dodgerblue;
+});
+
+// ES5
+for (var i = 0; i < boxesArray5.length; i++) {
+  // if second box continue
+  if (boxesArray5[i].className === 'box blue') {
+    continue;
+  }
+  boxesArray5[i].textContent = 'I changed to blue';
+}
+
+// ES6
+for (const cur of boxesArray6) {
+  if (cur.className === 'box blue') {
+    continue;
+  }
+  /* or
+  if(cur.className.includes('blue')){
+    continue;
+  }
+  */
+  cur.textContent = 'I changed to blue';
+}
+
+// ES5
+var ages = [12, 17, 8];
+var full = ages.map(function(cur) {
+  return cur >= 18;
+});
+
+ages[full.indexOf(true)];
+
+// ES6
+ages.findIndex(cur => return cur >=18); // return the index for which callback is true
+ages.find(cur =>  return cur >= 18); // retrieves the element instead if just the index
+```
