@@ -179,3 +179,60 @@ async function returns a promise on which we can use the then() method
 */
 getRecipesAW().then(result => console.log(`${result} is the best ever!`));
 ```
+
+#### Ajax and APIs
+
+- ajax -> asynchronous javascript and xml -> helps communicating with the server without reloading the page, fetch allows us to do ajax
+- APIs , application programming interface
+
+- fetch() is a not a part of the Javascript engine, its a method made available by the browser, part of the web API
+- fetch returns a promise it can have .then() and .catch() methods
+- the result of fecth is a readable stream and .json converts it to javascript format
+
+```javascript
+function getWeather(woeid) {
+  fetch(
+    `https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
+  )
+    .then(result => {
+      // console.log(result);
+      return result.json();
+    })
+    .then(data => {
+      // console.log(data);
+      const today = data.consolidated_weather[0];
+      console.log(
+        `Temperatures today in ${data.title} stay between ${
+          today.min_temp
+        } and ${today.max_temp}.`
+      );
+    })
+    .catch(error => console.log(error));
+}
+getWeather(2487956);
+getWeather(44418);
+async function getWeatherAW(woeid) {
+  try {
+    const result = await fetch(
+      `https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
+    );
+    const data = await result.json();
+    const tomorrow = data.consolidated_weather[1];
+    console.log(
+      `Temperatures tomorrow in ${data.title} stay between ${
+        tomorrow.min_temp
+      } and ${tomorrow.max_temp}.`
+    );
+    return data;
+  } catch (error) {
+    alert(error);
+  }
+}
+getWeatherAW(2487956);
+
+let dataLondon;
+getWeatherAW(44418).then(data => {
+  dataLondon = data;
+  console.log(dataLondon);
+});
+```
