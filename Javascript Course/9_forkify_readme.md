@@ -142,3 +142,106 @@ document.querySelector('.search').addEventListener('submit', e => {
   controlSearch();
 });
 ```
+
+#### Building search view
+
+- Advanced DOM manipulation techniques
+- Use ES6 string literal to render entire HTML components
+- How to create a loading spinner
+- use split and reduce method to prettify the long titles of the recipe
+- the reduce method takes an accumulator and current value in the callback, we have to pass an initial value to the accumulator with the param after the callback
+
+```javascript
+let title = 'kalfkjak sdfklas dfkasfkah sdfkak';
+let limit = 17;
+newTitle = [];
+title.split(' ').reduce((acc, cur) => {
+  if (acc + cur.length <= limit) {
+    newTitle.push(cur);
+  }
+  return acc + cur.length;
+}, 0);
+newTitle = `${newTitle.join(' ')} ...`;
+console.log(newTitle);
+```
+
+#### Rendering AJAX loading spinner
+
+```javascript
+// views/base.js
+export const renderLoader = parent => {
+  const loader = `
+    <div class="${elementStrings.loader}">
+      <svg>
+        <use href="img/icons.svg#icon-cw"></use>
+      </svg>
+    </div>
+  `;
+  parent.insertAdjacentHTML('afterbegin', loader);
+};
+
+export const clearLoader = () => {
+  const loader = document.querySelector(`.${elementStrings.loader}`);
+  if (loader) {
+    loader.parentElement.removeChild(loader);
+  }
+};
+
+// index.js
+import Search from './models/Search';
+import * as searchView from './views/searchView';
+import { elements, renderLoader, clearLoader } from './views/base';
+/**
+ * Global state of the app
+ * - Search Object
+ * - Current recipe object
+ * - Shopping list object
+ * - liked recipe
+ *
+ */
+const state = {};
+const controlSearch = async () => {
+  // 1. get the query from the view
+  const query = searchView.getInput();
+  console.log(query);
+  if (query) {
+    // 2. new search object and add to state
+    state.search = new Search(query);
+
+    // 3. Prepare the UI for the result
+    searchView.clearInput();
+    searchView.clearResults();
+    renderLoader(elements.searchRes);
+
+    // 4. Search for the recipes
+    await state.search.getResults();
+
+    // 5. Render results on the UI
+    clearLoader();
+    searchView.renderResults(state.search.result);
+  }
+};
+elements.searchForm.addEventListener('submit', e => {
+  e.preventDefault();
+  controlSearch();
+});
+```
+
+#### Implementing Search Results Pagination
+
+- How to use the .closest method for easier event handling
+- How and why to use data-\* attribute in HTML5
+- cannot add event on an element not visible in the DOM already
+- targetting button to add event listener becomes difficult
+- The closest() method of the Element interface returns the closest ancestor of the current element (or the current element itself) which matches the selectors given in a parameter. If no such element exists, it returns null.
+
+```javascript
+elements.searchResPages.addEventListener('click', e => {
+  const btn = e.target.closest('.btn-inline');
+  if (btn) {
+    const goToPage = parseInt(btn.dataset.goto, 10);
+    searchView.clearResults();
+    searchView.renderResults(state.search.result, goToPage);
+  }
+});
+```
