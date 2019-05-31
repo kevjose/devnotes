@@ -41,3 +41,104 @@
 - loaders, in webpack allows to load and process different files es6->es5 sass to css etc
 - in webpack modules -> rules -> regex -> use babel if match regex
 - some things like promises were not present in ES5, here babel cannot convert these rather use polyfills
+
+#### Project Architecture
+
+- going to use MVC, Model View Controller, easily decouples presentation logic with the application logic with an app controller in between
+- the above is similar to the budgety app in ES5, but now we will use ES6, will we use ES6 module for this
+- Model, Search.js, Recipe.js, List.js, Likes.js
+- View, SearchView.js, recipeView.js, listView.js, likesView.js
+- Controller, index.js
+
+#### How ES6 Modules work
+
+- How to use ES6 modules
+- Default and named exports and imports
+
+- Model file names starts with capital -> convention
+- default exports are used in case of only single exports
+- when we import the module no need of adding .js
+- named export, use export for each entity function constants etc.
+- to use different names in the named exports use the syntax `import {add as a, multiply as m} from './models/Search';`
+
+```javascript
+import { add } from './models/Search';
+import { multiply as m } from './models/Search';
+import * as search from './models/Search';
+console.log(`${add(2, 3)}`);
+console.log(`${search.multiply(2, 3)}`);
+```
+
+#### Making API calls
+
+- How to use real world APIs
+- What API keys are and why we need them
+- food2fork.com API
+
+#### Building Search Model
+
+- How to build a simple data model using ES6 classes
+
+```javascript
+import axios from 'axios';
+
+export default class Search {
+  constructor(query) {
+    this.query = query;
+  }
+
+  async getResults() {
+    try {
+      const proxy = 'https://cors-anywhere.herokuapp.com/';
+      const key = 'b6b9a58327dd7ba27f7da759f09325af';
+      const res = await axios(
+        `${proxy}https://www.food2fork.com/api/search?key=${key}&q=${
+          this.query
+        }`
+      );
+      this.result = res.data.recipes;
+      console.log(this.result);
+    } catch (err) {
+      alert(err);
+    }
+  }
+}
+```
+
+#### Building the Search Controller
+
+- The concept of application state
+- A simple way of implementing state
+
+```javascript
+import Search from './models/Search';
+/**
+ * Global state of the app
+ * - Search Object
+ * - Current recipe object
+ * - Shopping list object
+ * - liked recipe
+ *
+ */
+const state = {};
+const controlSearch = async () => {
+  // 1. get the query from the view
+  const query = 'pizza'; // TODO
+  if (query) {
+    // 2. new search object and add to state
+    state.search = new Search(query);
+
+    // 3. Prepare the UI for the result
+
+    // 4. Search for the recipes
+    await state.search.getResults();
+
+    // 5. Render results on the UI
+    console.log(state.search.result);
+  }
+};
+document.querySelector('.search').addEventListener('submit', e => {
+  e.preventDefault();
+  controlSearch();
+});
+```
