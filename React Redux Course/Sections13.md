@@ -112,3 +112,183 @@ const selectedSongReducer = (selectedSong = null, action) => {
   return selectedSong;
 };
 ```
+
+#### Wiring up the provider
+
+- combineReducers from redux imported and the reducers are combined and exported
+- the keys of the combineReducers object are the same as that would show up in the state object
+
+```javascript
+// reducers/index.js
+import { combineReducers } from 'redux';
+
+const songsReducer = () => {
+  return [
+    { title: 'No Scrubs', duration: '4:05' },
+    { title: 'Macarena', duration: '2:30' },
+    { title: 'All Star', duration: '3:15' },
+    { title: 'I Want it That Way', duration: '1:45' }
+  ];
+};
+
+const selectedSongReducer = (selectedSong = null, action) => {
+  if (action.type === 'SONG_SELECTED') {
+    return action.payload;
+  }
+
+  return selectedSong;
+};
+// these keys are the ones that show up in the state object
+export default combineReducers({
+  songs: songsReducer,
+  selectedSong: selectedSongReducer
+});
+```
+
+- Provider should be top most in the heirarchy
+
+```javascript
+// index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+import App from './components/App';
+import reducers from './reducers';
+
+ReactDOM.render(
+  <Provider store={createStore(reducers)}>
+    <App />
+  </Provider>,
+  document.querySelector('#root')
+);
+```
+
+#### The connect function
+
+- configuring connect with mapStateToProps
+- state param in the mapStateToProps -> contains all the redux store data
+- connect(SLICE_OF_REDUX_STORE_TO_BE_PASSED_AS_PROPS_CHUNKED_VIA_MAP_STATE_TO_PROPS,{ACTION_CREATORS_FOR_PROPS})(REACT_COMPONENT);
+- above thing passed in the connect will be available on the props object of the REACT_COMPONENT passed to connect
+
+```javascript
+// SongList.js
+import React from 'react';
+import { connect } from 'react-redux';
+
+class SongList extends React.Component {
+  renderList() {
+    return this.props.songs.map(song => {
+      return <div key={song.title}>{song.title}</div>;
+    });
+  }
+  render() {
+    return <div>{this.renderList()}</div>;
+  }
+}
+// state -> contains all the redux store data
+const mapStateToProps = state => {
+  return { songs: state.songs };
+};
+export default connect(mapStateToProps)(SongList);
+```
+
+```javascript
+// components/App.js
+
+import React from 'react';
+import { selectSong } from '../actions';
+import SongList from './SongList';
+
+const App = () => {
+  return (
+    <div>
+      <SongList />
+    </div>
+  );
+};
+
+export default App;
+```
+
+#### Building a list with redux data
+
+- if we have to update rdux data call the action crator
+- connect function also used to get actions to our components correctly
+- any time data in the redux store is changed by the action creator and reducer the mapStateToProps re-runs with the new state (redux store object)
+
+```javascript
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { selectSong } from '../actions';
+
+class SongList extends Component {
+  renderList() {
+    return this.props.songs.map(song => {
+      return (
+        <div className="item" key={song.title}>
+          <div className="right floated content">
+            <button
+              className="ui button primary"
+              onClick={() => this.props.selectSong(song)}
+            >
+              Select
+            </button>
+          </div>
+          <div className="content">{song.title}</div>
+        </div>
+      );
+    });
+  }
+
+  render() {
+    return <div className="ui divided list">{this.renderList()}</div>;
+  }
+}
+
+const mapStateToProps = state => {
+  return { songs: state.songs };
+};
+
+export default connect(
+  mapStateToProps,
+  { selectSong }
+)(SongList);
+```
+
+#### why not call action creator directly rather that passing it to props via connect function ??
+
+#### Redux not magic
+
+- redux does not detect action creators being called
+- redux does not detect automatically a function returning an object that is an action
+- connect function is responsible for calling the dispatch function on the function it attaches to the props object -> hence pass action creator via conenct(mapStateToProps,{action_creators:action_creators})(COMPONENT)
+
+```javascript
+import React from 'react';
+import { connect } from 'react-redux';
+
+const SongDetail = props => {
+  if (!props.song) {
+    return <div>Select a song</div>;
+  }
+
+  return (
+    <div>
+      <h3>Details for:</h3>
+      <p>
+        Title: {props.song.title}
+        <br />
+        Duration: {props.song.duration}
+      </p>
+    </div>
+  );
+};
+
+const mapStateToProps = state => {
+  return { song: state.selectedSong };
+};
+
+export default connect(mapStateToProps)(SongDetail);
+```
