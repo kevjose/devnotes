@@ -31,3 +31,18 @@ function reverse(str) {
 
 module.exports = reverse;
 ```
+
+#### debugger statements
+
+- `debugger`, pauses the execution
+- node inspect reversestring/index.js
+- type `c` or `cont` to continue to reach the next debug statement
+- type `repl` to start a javascript console mode where we can read, edit , inspect varaibles, eval expresssion etc.
+
+- steps
+- add `debugger` statement in the funciton
+- call the function manually
+- at the terminal run `node inspect file_name.js`
+- to continue execution press 'c' then 'enter'
+- to launch a repl session type repl and hit enter
+- to exit repl press ctrl+c
