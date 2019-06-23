@@ -557,3 +557,660 @@ ReactDOM.render(<Page />, document.getElementById('root'));
 ```
 
 - Returning null from a component’s render method does not affect the firing of the component’s lifecycle methods. For instance componentDidUpdate will still be called.
+
+#### List and keys
+
+- transform lists in JS using map
+
+```javascript
+const numbers = [1, 2, 4, 3, 5];
+const doubled = numbers.map(num => num * 2);
+console.log(doubled);
+```
+
+- In react transforming array into list of elements is nearly identical
+- Rendering multiple components
+
+```javascript
+const numbers = [1, 2, 3, 4, 5, 6];
+const listItems = numbers.map(num => {
+  <li> {num} </li>;
+});
+ReactDOM.render(<ul>{listItem}</ul>, document.getElementById('root'));
+```
+
+- Basic list component
+
+```javascript
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItem = numbers.map(num => {
+    <li>{num}</li>;
+  });
+  return <ul>{listItem}</ul>;
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+);
+```
+
+- the above will give a warning that key should be provided for the list items
+- key is a special string attribute
+
+```javascript
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItem = numbers.map(num => {
+    <li key={num.toString()}>{num}</li>;
+  });
+  return <ul>{listItem}</ul>;
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+);
+```
+
+- Keys help react identify which item has changed, added or removed. Key are given to the elements in the array to give them a stable identity
+- React does not recommed using indexes for key if the order of the item may change, React by default uses index as key values if not provided any
+
+#### Forms
+
+- HTML form elements work differently than other DOM elements in React, form elements naturally keep some internal state
+- The form has a default behavior of browsing to a new page when the use submits the form. This works in react as well,however its more convenient to have JS function that handles the submission of the form and has access to the data that the use entered into the form. - Controlled Components
+
+- Controlled Components, In HTML, form elements like input, textarea, select typically maintain their own state and update it based on the user input. In React, mutable state is typically kept in the state property of the component and only updated using the `setState()`.
+- We make react state the single source of truth.
+
+```javascript
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: '' };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({ value: e.target.value });
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(this.state.value);
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input
+            type="text"
+            onChange={this.onbChange}
+            value={this.state.value}
+          />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+```
+
+#### Lifting state up
+
+- Often several components need to reflect the same changing data. WE lift the shared state up to its closest common ancestor.
+
+```javascript
+function BoilingVerdict(props) {
+  if (props.celsius >= 100) {
+    return <p>Water is boiling </p>;
+  } else {
+    return <p>Water not boiling</p>;
+  }
+}
+```
+
+- create Calculator component, it renders input tag and lets you enter the temperature and keeps in the state, addtionally it renders the BoilingVerdict for the current input value
+
+```javascript
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { temperatur: '' };
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({ temperature: e.target.value });
+  }
+
+  render() {
+    const temperature = this.state.temperature;
+    return (
+      <fieldset>
+        <legend>Enter temperature in Celsius:</legend>
+        <input value={temperature} onChange={this.handleChange} />
+
+        <BoilingVerdict celsius={parseFloat(temperature)} />
+      </fieldset>
+    );
+  }
+}
+```
+
+- For multiple inputs celsius and farenheit and they must be in sync
+
+```javascript
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+    this.state = { temperature: '', scale: 'c' };
+  }
+
+  handleCelsiusChange(temperature) {
+    this.setState({ scale: 'c', temperature });
+  }
+
+  handleFahrenheitChange(temperature) {
+    this.setState({ scale: 'f', temperature });
+  }
+
+  render() {
+    const scale = this.state.scale;
+    const temperature = this.state.temperature;
+    const celsius =
+      scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+    const fahrenheit =
+      scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+
+    return (
+      <div>
+        <TemperatureInput
+          scale="c"
+          temperature={celsius}
+          onTemperatureChange={this.handleCelsiusChange}
+        />
+
+        <TemperatureInput
+          scale="f"
+          temperature={fahrenheit}
+          onTemperatureChange={this.handleFahrenheitChange}
+        />
+
+        <BoilingVerdict celsius={parseFloat(celsius)} />
+      </div>
+    );
+  }
+}
+```
+
+- React calls the function specified as onChange on the DOM <input>. In our case, this is the handleChange method in the TemperatureInput component.
+- The handleChange method in the TemperatureInput component calls this.props.onTemperatureChange() with the new desired value. Its props, including onTemperatureChange, were provided by its parent component, the Calculator.
+- When it previously rendered, the Calculator has specified that onTemperatureChange of the Celsius TemperatureInput is the Calculator’s handleCelsiusChange method, and onTemperatureChange of the Fahrenheit TemperatureInput is the Calculator’s handleFahrenheitChange method. So either of these two Calculator methods gets called depending on which input we edited.
+- Inside these methods, the Calculator component asks React to re-render itself by calling this.setState() with the new input value and the current scale of the input we just edited.
+- React calls the Calculator component’s render method to learn what the UI should look like. The values of both inputs are recomputed based on the current temperature and the active scale. The temperature conversion is performed here.
+- React calls the render methods of the individual TemperatureInput components with their new props specified by the Calculator. It learns what their UI should look like.
+- React calls the render method of the BoilingVerdict component, passing the temperature in Celsius as its props.
+- React DOM updates the DOM with the boiling verdict and to match the desired input values. The input we just edited receives its current value, and the other input is updated to the temperature after conversion.
+
+#### Composition vs Inheritance
+
+- Containment, some components may not know its children ahead of time, use the `props.children`, to pass children directly into their output
+
+```javascript
+function FancyBox(props) {
+  return <div className={props.color}>{props.children}</div>;
+}
+
+function WelcomeDialogue() {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">Welcome</h1>
+      <p className="Dialog-message">Thank you for visiting our spacecraft!</p>
+    </FancyBorder>
+  );
+}
+```
+
+- Anything inside the <FancyBorder> JSX tag gets passed into the FancyBorder component as a children prop. Since FancyBorder renders {props.children} inside a <div>, the passed elements appear in the final output.
+
+- what if we need multiple holes, in a component, come up with own convention rather than using the children property.
+
+```javascript
+function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">{props.left}</div>
+      <div className="SplitPane-right">{props.right}</div>
+    </div>
+  );
+}
+
+function App() {
+  return <SplitPane left={<Contacts />} right={<Chat />} />;
+}
+```
+
+- React elements like <Contacts /> and <Chat /> are just objects, so you can pass them as props like any other data.
+- Specialization, configurirng with props
+
+```javascript
+function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">{props.title}</h1>
+      <p className="Dialog-message">{props.message}</p>
+    </FancyBorder>
+  );
+}
+
+function WelcomeDialog() {
+  return (
+    <Dialog title="Welcome" message="Thank you for visiting our spacecraft!" />
+  );
+}
+```
+
+- Composition with classes
+
+```javascript
+function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">{props.title}</h1>
+      <p className="Dialog-message">{props.message}</p>
+      {props.children}
+    </FancyBorder>
+  );
+}
+
+class SignUpDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
+    this.state = { login: '' };
+  }
+
+  render() {
+    return (
+      <Dialog
+        title="Mars Exploration Program"
+        message="How should we refer to you?"
+      >
+        <input value={this.state.login} onChange={this.handleChange} />
+
+        <button onClick={this.handleSignUp}>Sign Me Up!</button>
+      </Dialog>
+    );
+  }
+
+  handleChange(e) {
+    this.setState({ login: e.target.value });
+  }
+
+  handleSignUp() {
+    alert(`Welcome aboard, ${this.state.login}!`);
+  }
+}
+```
+
+#### Thinking in react
+
+- Building a searchable product data table using react
+- Break UI into component hierarchy
+- Single responsibility principle, component should ideally do only one thing, if it end up growing it should be decomposed into smaller subcomponents
+- Five components for our simple app
+
+1. FilterableProductTable, Contains the application
+2. SearchBar, receives all user input
+3. ProductTable, displays and filters the data collection based on user input
+4. ProductCategoryRow, dispalys a heading for each category
+5. ProductRow, displays row for each product
+
+- Building a static version in react
+
+```javascript
+class ProductCategoryRow extends React.Component {
+  render() {
+    const category = this.props.category;
+    return (
+      <tr>
+        <th colSpan="2">{category}</th>
+      </tr>
+    );
+  }
+}
+
+class ProductRow extends React.Component {
+  render() {
+    const product = this.props.product;
+    const name = product.stocked ? (
+      product.name
+    ) : (
+      <span style={{ color: 'red' }}>{product.name}</span>
+    );
+
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{product.price}</td>
+      </tr>
+    );
+  }
+}
+
+class ProductTable extends React.Component {
+  render() {
+    const rows = [];
+    let lastCategory = null;
+
+    this.props.products.forEach(product => {
+      if (product.category !== lastCategory) {
+        rows.push(
+          <ProductCategoryRow
+            category={product.category}
+            key={product.category}
+          />
+        );
+      }
+      rows.push(<ProductRow product={product} key={product.name} />);
+      lastCategory = product.category;
+    });
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+class SearchBar extends React.Component {
+  render() {
+    return (
+      <form>
+        <input type="text" placeholder="Search ..." />
+        <p>
+          <input type="checkbox" /> Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+class FilterableProductTable extends React.Component {
+  render() {
+    return (
+      <div>
+        <SearchBar />
+        <ProductTable products={this.props.products} />
+      </div>
+    );
+  }
+}
+
+const PRODUCTS = [
+  {
+    category: 'Sporting Goods',
+    price: '$49.99',
+    stocked: true,
+    name: 'Football'
+  },
+  {
+    category: 'Sporting Goods',
+    price: '$9.99',
+    stocked: true,
+    name: 'Baseball'
+  },
+  {
+    category: 'Sporting Goods',
+    price: '$29.99',
+    stocked: false,
+    name: 'Basketball'
+  },
+  {
+    category: 'Electronics',
+    price: '$99.99',
+    stocked: true,
+    name: 'iPod Touch'
+  },
+  {
+    category: 'Electronics',
+    price: '$399.99',
+    stocked: false,
+    name: 'iPhone 5'
+  },
+  { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' }
+];
+
+ReactDOM.render(
+  <FilterableProductTable products={PRODUCTS} />,
+  document.getElementById('container')
+);
+```
+
+- Identify the minimal but complete representation of the UI state
+
+- Think of all of the pieces of data in our example application. We have:
+
+- The original list of products
+- The search text the user has entered
+- The value of the checkbox
+- The filtered list of products
+
+- Is it passed in from a parent via props? If so, it probably isn’t state.
+- Does it remain unchanged over time? If so, it probably isn’t state.
+- Can you compute it based on any other state or props in your component? If so, it isn’t state.
+
+- Our final state is
+- The search text the user has entered
+- The value of the checkbox
+
+- Identify where the state should live
+- Inverse data flow
+
+```javascript
+class ProductCategoryRow extends React.Component {
+  render() {
+    const category = this.props.category;
+    return (
+      <tr>
+        <th colSpan="2">{category}</th>
+      </tr>
+    );
+  }
+}
+
+class ProductRow extends React.Component {
+  render() {
+    const product = this.props.product;
+    const name = product.stocked ? (
+      product.name
+    ) : (
+      <span style={{ color: 'red' }}>{product.name}</span>
+    );
+
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{product.price}</td>
+      </tr>
+    );
+  }
+}
+
+class ProductTable extends React.Component {
+  render() {
+    const filterText = this.props.filterText;
+    const inStockOnly = this.props.inStockOnly;
+
+    const rows = [];
+    let lastCategory = null;
+
+    this.props.products.forEach(product => {
+      if (product.name.indexOf(filterText) === -1) {
+        return;
+      }
+      if (inStockOnly && !product.stocked) {
+        return;
+      }
+      if (product.category !== lastCategory) {
+        rows.push(
+          <ProductCategoryRow
+            category={product.category}
+            key={product.category}
+          />
+        );
+      }
+      rows.push(<ProductRow product={product} key={product.name} />);
+      lastCategory = product.category;
+    });
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handleInStockChange = this.handleInStockChange.bind(this);
+  }
+
+  handleFilterTextChange(e) {
+    this.props.onFilterTextChange(e.target.value);
+  }
+
+  handleInStockChange(e) {
+    this.props.onInStockChange(e.target.checked);
+  }
+
+  render() {
+    return (
+      <form>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={this.props.filterText}
+          onChange={this.handleFilterTextChange}
+        />
+        <p>
+          <input
+            type="checkbox"
+            checked={this.props.inStockOnly}
+            onChange={this.handleInStockChange}
+          />{' '}
+          Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+class FilterableProductTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: '',
+      inStockOnly: false
+    };
+
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handleInStockChange = this.handleInStockChange.bind(this);
+  }
+
+  handleFilterTextChange(filterText) {
+    this.setState({
+      filterText: filterText
+    });
+  }
+
+  handleInStockChange(inStockOnly) {
+    this.setState({
+      inStockOnly: inStockOnly
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <SearchBar
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+          onFilterTextChange={this.handleFilterTextChange}
+          onInStockChange={this.handleInStockChange}
+        />
+        <ProductTable
+          products={this.props.products}
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />
+      </div>
+    );
+  }
+}
+
+const PRODUCTS = [
+  {
+    category: 'Sporting Goods',
+    price: '$49.99',
+    stocked: true,
+    name: 'Football'
+  },
+  {
+    category: 'Sporting Goods',
+    price: '$9.99',
+    stocked: true,
+    name: 'Baseball'
+  },
+  {
+    category: 'Sporting Goods',
+    price: '$29.99',
+    stocked: false,
+    name: 'Basketball'
+  },
+  {
+    category: 'Electronics',
+    price: '$99.99',
+    stocked: true,
+    name: 'iPod Touch'
+  },
+  {
+    category: 'Electronics',
+    price: '$399.99',
+    stocked: false,
+    name: 'iPhone 5'
+  },
+  { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' }
+];
+
+ReactDOM.render(
+  <FilterableProductTable products={PRODUCTS} />,
+  document.getElementById('container')
+);
+```
