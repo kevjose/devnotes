@@ -289,3 +289,21 @@ COPY index.js index.js
 
 CMD ["node", "index.js"]
 ```
+
+```bash
+$: docker run --init --publish 3000:3000 my-node-app # or you can use -p instead of --publish
+```
+
+- a better Dokcerfile
+
+```Dockerfile
+FROM node:12-stretch
+
+USER node
+
+WORKDIR /home/node/code
+
+COPY --chown=node:node index.js .
+
+CMD ["node", "index.js"]
+```
