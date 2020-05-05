@@ -171,3 +171,76 @@ function Comment(props){
 
 - props are read only
 - all react components must act pure wrt their props
+
+## State and lifecycle
+
+```javascript
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { date: new Date() };
+  }
+  componentDidMount() {
+    this.timerID = setInterval(() => this.tick(), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+  tick() {
+    this.setState({ date: new Date() });
+  }
+  render() {
+    return (
+      <div>
+        <h1>Hello World</h1>
+        <h2> It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Clock />, document.getElementById('root'));
+```
+
+- state to modified directly only in constructor.
+- setState may do apply changes in batches
+- for relaible way to use state values, use below
+
+```javascript
+this.setState((state, props) => ({
+  counter: state.counter + props.increment
+}));
+```
+
+- also setState does a shallow merge, ie we can update only a few keys in the state and it does not affect the remaining ones
+
+## Handling Events
+
+```javascript
+function ActionLink() {
+  function handlClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked');
+  }
+  return (
+    <a href='#' onClick={handleClick}>
+      Click me.
+    </a>
+  );
+}
+```
+
+- `e` here is a synthetic event
+- use the .bind notation to fix the `this` issue or the public class field syntax
+- passing args to event handlers
+
+```html
+<button onClick={(e) => this.deleteRow(id, e)}> Delete Row</button>
+
+<button onClick={this.deleteRow.bind(this, id)}> Delete Row</button>
+```
+
+## Conditional rendering
+
+- using if conditon in a function
+- using logical && inline
