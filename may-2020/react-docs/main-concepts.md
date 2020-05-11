@@ -244,3 +244,135 @@ function ActionLink() {
 
 - using if conditon in a function
 - using logical && inline
+
+## List and keys
+
+- keys help react identify which item in the list has changed, added or removed, Keys should be given to elements inside the array t o give the elements a stable identity.
+
+```javascript
+const todoItems = todos.map(todo => (
+  <li key={todo.id}>
+    {todo.text}
+  </li>
+)
+
+```
+
+- using `index` is not considered as using a stable key
+- keys only make sense in context of surrouding array
+
+```javascript
+function ListItem(props) {
+  return <li>{props.value}</li>;
+}
+
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map(number => {
+    return <ListItem key={number.toString()} value={number} />;
+  });
+  return <ul>{listItem}</ul>;
+}
+const numbers = [1, 2, 3, 4, 5, 6, 7];
+ReactDOM.render(
+  <NumberList number={numbers} />,
+  document.geElementById('root')
+);
+```
+
+- key must be unique among siblings, no need to be globally unique
+
+## Forms
+
+- html form elements keep internal state
+- `Controlled components`, html forms like input, textarea and select maintain their own state. In react mutable state is kept in state property and updated with setState()
+- React state as the single source of truth, this notion is called controlled components
+
+```javascript
+class NameForm extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {value: ''};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event){
+    this.setState({value: event.target.value})
+  }
+
+  handleSubmit(event){
+    event.preventDefault()
+    console.log(this.state.value);
+  }
+
+  render(){
+    return(
+      <form onSubmit={this.handleSubmit}/>
+        <label>
+          Name:
+          <input type="text" value={tnis.state.value} onChange={this.handleChange}/>
+        </label>
+        <input type="submit" value="Submit">
+      </form>
+    )
+  }
+
+}
+```
+
+- in textarea use the value attrib in react to set its value
+- for select also use the value attrib
+- file type input is uncontrolled since its read only
+
+* for multiple fields
+
+```javascript
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.name === 'isGoing' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value // computed property name syntax
+    });
+  }
+
+  render() {
+    return (
+      <form>
+        <label>
+          Is going:
+          <input
+            name='isGoing'
+            type='checkbox'
+            checked={this.state.isGoing}
+            onChange={this.handleInputChange}
+          />
+        </label>
+        <br />
+        <label>
+          Number of guests:
+          <input
+            name='numberOfGuests'
+            type='number'
+            value={this.state.numberOfGuests}
+            onChange={this.handleInputChange}
+          />
+        </label>
+      </form>
+    );
+  }
+}
+```
