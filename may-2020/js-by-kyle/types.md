@@ -63,6 +63,60 @@ if(!Object.is || true /* temporary */){
 
 ```
 
-- fundamentaal objects aka built in objects or native function
+- fundamental objects aka built in objects or native function
 - use new with Object(), Array(), Function(), Date(), RegExp(), Error()
 - without new, String(), Number(), Boolean use as functions and not as constructor
+
+### Abstract operations
+
+- type coversion same is coersion
+  ToPrimitve(hint) -> abstract opertaions
+- function in js are inherently recursive, is non primitive is put again in ToPrimitive, recursively
+- any non primitive has valueOf and toString function
+- toPrimitve invokes these valueOf and toString to get a primitive.
+- coersion is done with valueOf and toString property
+
+- ToString, operation null->'null' undefined -> 'undefined' -0 -> '0' (corner case)
+- [1,2,3] toString '1,2,3'
+- [null, undefined] toString ',' the string 'null' and 'undefined' are left out
+- {} toString "[object Object]"
+- {a:2} toString "[object Object]"
+- {toString(){return "X"}} toString "X"
+
+- ToNumber
+- "" toNumber 0
+- "0" toNumber 0
+- "0." -> 0
+- ".0" -> 0
+- "." -> NaN
+- " 0009 " -> 9
+- false toNumber 0
+- true toNumber 1
+- null toNumber 0
+- undefined toNumber NaN
+
+- for [] and {} by default {valueO(){return this;}}
+
+- ToBoolean, does not invoke the toPrimitve function just a lookup , unlike the toString and toNumber
+- lookup if truthy or false
+- falsy, "",0,-0, null, NaN, false, undefined
+- truthy otherwise
+
+#### Cases of coercion
+
+- the template literals uses coercion, implicity
+- - operator overload, if either operand is a string, it does a abstract toString operation
+- unary + invokes toNumber operation
+- `-` operator is not overloaded, it invokes a toNumber on the string operand
+
+#### Boxing
+
+- accesing properties on primitive value, how does this work, this is called boxing, a form of implicit coercion, use it as if it were an object, this is where the notion from where evrything in js in an object
+- corner case of coercion, Number("") -> 0
+- String([null]) -> "0"
+- String([undefined]) -> "0"
+- Boolean(new Boolean(false)) -> true
+- 1<2<3 , accident 1<2 gets evaluate to true true<3 a toNumber invoked on so 1<3 so this is actually an accident
+- 3>2>1 => 1>1 -> false which is not correct
+
+- adopt a coding style that makes value types plain and obivious
