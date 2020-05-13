@@ -746,4 +746,4 @@ const styles = StyleSheet.create({
 
 - the heart of building react native apps: components (builtin and custom components) + layout and styling (custom fonts etc.) + native API modules (later point)
 - will cover component + layout and styling (images and custom fonts)
-- an application, with a header (Guess a number), starting screen with input with button confirm and reset, button to start a screen with the same header, computer guessed number, suggest lower or greater, alert for cheat(:P if wrong hint was given), summary screen , restart game button
+- an application, with a header (Guess a number), starting screen with input with button confirm and reset, button to start a screen with the same header, computer guessed number, suggest lower or greater, alert for cheat(:P if wrong hint was given), summary screen , restart game button etc.
