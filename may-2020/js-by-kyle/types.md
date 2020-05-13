@@ -120,3 +120,54 @@ if(!Object.is || true /* temporary */){
 - 3>2>1 => 1>1 -> false which is not correct
 
 - adopt a coding style that makes value types plain and obivious
+
+- coercion exercise
+
+```javascript
+//isValidName, string, non-empty, non-whitespace and atleast 3 character
+function isValidName(name) {
+  if (typeof name == 'string' && name.trim().length >= 3) {
+    return true;
+  }
+  return false;
+}
+
+// hoursAttended(attended, length) two params either number or number, both params treated as numbers, whole numbers and attended must be equal to length
+function hoursAttended(attended, length) {
+  if (typeof attended == 'string' && attended.trim() !== '') {
+    attended = Number(attended);
+  }
+  if (typeof length == 'string' && length.trim() !== '') {
+    length = Number(length);
+  }
+  if (
+    typeof attended == 'number' &&
+    typeof length == 'number' &&
+    attended >= 0 &&
+    length >= 0 &&
+    Number.isInteger(attended) &&
+    Number.isInteger(length) &&
+    attended <= length
+  ) {
+    return true;
+  }
+  return false;
+}
+```
+
+## Equality
+
+- double and triple equals
+- `==` so called loose(Abstract equality comparison) vs `===` so called strict(Strict equality comparison)
+- while writing an algorithm, it is imperitive that the types are predictable
+- coercive equality
+- `==` allows coercion `===` disallow coercion
+- to use either, do you want to allow type coercion or not.
+- `null == undefined` vice versa, true
+- to have `a === null || a === undefined` is longer and does not make sense because `null == undefined`, it should be `a==null`, without using the triple equality is better.
+- `==` prefers Numeric comparison, coerce to Number if either operand is a string
+- if either x or y are not string or number invoke ToPrimitive on the operand that is not a string or number
+- `42 == [42]` // true -> `42 == '42'` -> to Number -> `42 === 42`, as per the spec
+- Summary, if type are the same ===, if null or undefined-> equal, if non-primitive: ToPrimitive, Prefer -> toNumber
+- `==`, corner case `[] == ![]` -> true (this is artificial corner case) under what circumstance would you compare the negation to self.
+- if the types are different, the equivalent of one == would be two two(or more) === that is slower
