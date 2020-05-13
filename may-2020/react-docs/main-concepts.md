@@ -383,3 +383,86 @@ class Reservation extends React.Component {
 - There should be a single “source of truth” for any data that changes in a React application. Usually, the state is first added to the component that needs it for rendering. Then, if other components also need it, you can lift it up to their closest common ancestor. Instead of trying to sync the state between different components, you should rely on the top-down data flow.
 
 - Lifting state involves writing more “boilerplate” code than two-way binding approaches, but as a benefit, it takes less work to find and isolate bugs. Since any state “lives” in some component and that component alone can change it, the surface area for bugs is greatly reduced
+
+### Composition vs Inheritance
+
+- react, prefer composition over interhitance, to reuse code between components
+- Containment, when components are generic boxes like sidebar or modal, user props.children to pass chilren elements to their output
+
+```javascript
+function FancyBorder(props) {
+  return (
+    <div className={`FancyBorder FancyBorder-` + props.color}>
+      {props.children}
+    </div>
+  );
+}
+
+function WelcomeDialogue() {
+  return (
+    <FancyBorder color='blue'>
+      <h1 className='Dialog-title'>Welcome</h1>
+      <p className='Thank you for visiting'></p>
+    </FancyBorder>
+  );
+}
+
+// in case we might need more holes other than children
+
+function SplitPane(props) {
+  return (
+    <div>
+      {props.left}
+      {props.right}
+    </div>
+  );
+}
+function App() {
+  return <SplitPane left={<Contacts />} right={<Chat />} />;
+}
+```
+
+- react elements are just like objects and can be passed like props
+- also works well with classes
+
+```javascript
+function Dialog(props) {
+  return (
+    <FancyBorder color='blue'>
+      <h1 className='Dialog-title'>{props.title}</h1>
+      <p className='Dialog-message'>{props.message}</p>
+      {props.children}
+    </FancyBorder>
+  );
+}
+
+class SignUpDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { login: '' };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
+  }
+  render() {
+    return (
+      <Dialog
+        title='Mars Exploration Program'
+        message='How should we refer to you?'
+      >
+        <input value={this.state.login} onChange={this.handleChange} />
+        <button onClick={this.handleSignUp}>Sign Me Up!</button>
+      </Dialog>
+    );
+  }
+
+  handleChange(e) {
+    this.setState({ login: e.target.value });
+  }
+
+  handleSignUp() {
+    alert(`Welcome aboard, ${this.state.login}!`);
+  }
+}
+```
+
+- If you want to reuse non-UI functionality between components, we suggest extracting it into a separate JavaScript module. The components may import it and use that function, object, or a class, without extending it
