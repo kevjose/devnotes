@@ -466,3 +466,241 @@ class SignUpDialog extends React.Component {
 ```
 
 - If you want to reuse non-UI functionality between components, we suggest extracting it into a separate JavaScript module. The components may import it and use that function, object, or a class, without extending it
+
+### Thinking in react
+
+- start with a mock
+- break ui into a component hierarchy (use single responsiblity principle)
+- FilterableProductTable (contains the entirety of the example)
+- -SearchBar (receives user input)
+- - ProductTable (display row for each product)
+- - - ProductCategoryRow (display heading for each category)
+- - - ProductRow (dispaly row for each product)
+- build a static version in react
+- props are way of passing data from parent to child
+- use props and not state, build top down or bottom-up
+
+- Step 2
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class SearchBar extends React.Component {
+  render() {
+    return (
+      <form>
+        <input type='text' placeholder='Search...' />
+        <p>
+          <input type='checkbox' />
+          Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+class ProductCategoryRow extends React.Component {
+  render() {
+    const category = this.props.category;
+    return (
+      <tr>
+        <th colSpan='2'>{category}</th>
+      </tr>
+    );
+  }
+}
+class ProductRow extends React.Component {
+  render() {
+    const product = this.props.product;
+    const name = product.stocked ? (
+      product.name
+    ) : (
+      <span style={{ color: 'red' }}>{product.name}</span>
+    );
+
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{product.price}</td>
+      </tr>
+    );
+  }
+}
+
+class ProductTable extends React.Component {
+  render() {
+    const rows = [];
+    let lastCategory = null;
+    this.props.products.forEach(product => {
+      if (product.category !== lastCategory) {
+        rows.push(
+          <ProductCategoryRow
+            category={product.category}
+            key={product.category}
+          />
+        );
+      }
+      rows.push(<ProductRow product={product} key={product.name} />);
+      lastCategory = product.category;
+    });
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+class FilterableProductTable extends React.Component {
+  render() {
+    return (
+      <div>
+        <SearchBar />
+        <ProductTable products={this.props.products} />
+      </div>
+    );
+  }
+}
+const PRODUCTS = [];
+ReactDOM.render(
+  <FilterableProductTable products={PRODUCTS} />,
+  document.getElementById('root')
+);
+```
+
+- step 3 identify the minimal representation of the ui state
+- original list of products passed as props, hence not a state
+- search text is a state
+- filtered products can be computed from props hence not state
+
+* step 4 where should state live
+* step 5 inverse data flow
+
+```javascript
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handlInStockChange = this.handlInStockChange.bind(this);
+  }
+  handleFilterTextChange(e) {
+    this.props.onFilterTextChange(e.target.value);
+  }
+
+  handleInStockChange(e) {
+    this.props.onInStockChange(e.target.checked);
+  }
+
+  render() {
+    return (
+      <form>
+        <input
+          type='text'
+          placeholder='Search...'
+          value={this.props.filterText}
+          onChange={this.handleFilterTextChange}
+        />
+        <p>
+          <input
+            type='checkbox'
+            checked={this.props.inStockOnly}
+            onChange={this.handleInStockChange}
+          />{' '}
+          Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+class ProductTable extends React.Component {
+  render() {
+    const filterText = this.props.filterText;
+    const inStockOnly = this.props.inStockOnly;
+
+    const rows = [];
+    let lastCategory = null;
+
+    this.props.products.forEach(product => {
+      if (product.name.indexOf(filterText) === -1) {
+        return;
+      }
+      if (inStockOnly && !product.stocked) {
+        return;
+      }
+      if (product.category !== lastCategory) {
+        rows.push(
+          <ProductCategoryRow
+            category={product.category}
+            key={product.category}
+          />
+        );
+      }
+      rows.push(<ProductRow product={product} key={product.name} />);
+      lastCategory = product.category;
+    });
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+class FilterableProductTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: '',
+      inStockOnly: false
+    };
+
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handleInStockChange = this.handleInStockChange.bind(this);
+  }
+
+  handleFilterTextChange(filterText) {
+    this.setState({
+      filterText: filterText
+    });
+  }
+
+  handleInStockChange(inStockOnly) {
+    this.setState({
+      inStockOnly: inStockOnly
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <SearchBar
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+          onFilterTextChange={this.handleFilterTextChange}
+          onInStockChange={this.handleInStockChange}
+        />
+        <ProductTable
+          products={this.props.products}
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />
+      </div>
+    );
+  }
+}
+```
