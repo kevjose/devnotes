@@ -171,3 +171,74 @@ function hoursAttended(attended, length) {
 - Summary, if type are the same ===, if null or undefined-> equal, if non-primitive: ToPrimitive, Prefer -> toNumber
 - `==`, corner case `[] == ![]` -> true (this is artificial corner case) under what circumstance would you compare the negation to self.
 - if the types are different, the equivalent of one == would be two two(or more) === that is slower
+
+```javascript
+// findAll, takes array, returns array, mataches coercively with some conditions
+function findAll(match, arr) {
+  var ret = [];
+  for (let v of arr) {
+    if (Object.is(match, v)) {
+      ret.push(v);
+    } else if (match == null && v == null) {
+      ret.push(v);
+    } else if (typeof match == 'boolean' && typeof v == 'boolean') {
+      if (match == v) {
+        ret.push(v);
+      }
+    } else if (
+      typeof match == 'string' &&
+      match.trim() != '' &&
+      typeof v == 'number' &&
+      !Object.is(v, -0)
+    ) {
+      if (match == v) ret.push(v);
+    } else if(
+      typeof match == 'number' &&
+      !Object.is(match, -0)
+      !Object.is(match, NaN) &&
+      !Object.is(match, Infinity) &&
+      !Object.is(match, -Infinity) &&
+      typeof v == 'string' &&
+      v.trim() != ''
+    ){
+      if(match ==v){
+        ret.push(v)
+      }
+    }
+  }
+  return ret;
+}
+```
+
+## Static Typing
+
+- Typescript and flow
+- - catch type realted mistakes
+- - communicate type intent
+- - provide IDE feeback
+- - caveats, inferencing is a guess, not a guarantee
+- - caveats, annotations are optional, its an opt-in system
+- - caveate, any place that isint type, there is uncertainity
+
+- custom types
+
+```typescript
+type student = { name: string };
+function getName(studentRec: student): string {
+  return studentRec, name;
+}
+
+var firstStudent: student = { name: 'Frank' };
+```
+
+- static typing pros: make types obivious in code, look like other language's type system (sense of similarity from other language users), extremely popular
+- static typing cons: non JS standard syntax, requires a build process(however this is essential, and build process are common these day though), feels sophisticated , intimidating for those without prior formal types experience, syntax explodes exponentially, barrier to entry, they focus more on static type but not value, just like JS actually does (outside JS DNA)
+
+## Scope
+
+- one of the core pillars, scope system, lexical scoping mechanism
+- nested scope, hoisting, closure, module pattern.
+- scope, where to look for things, (either assignment, or retrieval)
+- scope, like sorting marbles into colored buckets
+- JS is parsed language, ie some processing before execution of program, consider syntax error before start execution.
+- AST created before execution, JS is a two pass system, scopes are functions and block in JS (units of scope)
