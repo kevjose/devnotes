@@ -223,3 +223,154 @@ ladder
   .down()
   .showStep(); // 1
 ```
+
+### constructor operator - new
+
+- new allows to create template based objects
+
+```javascript
+function User(name) {
+  this.name = name;
+  this.isAdmin = false;
+}
+let user = new User('Jack');
+console.log(user.name, user.isAdmin); // Jack, false
+```
+
+- function executed with `new`, new empty object created and assigned to `this`, function body executes and mostly adds props to the this object,
+
+```javascript
+// calling fn with `new`
+function User(name) {
+  // capitalizing is just a convention
+  // this = {} implicitly
+  this.name = name;
+  this.isAdmin = false;
+  // return this implicity
+}
+let user = new User('Jack');
+```
+
+- to check if function was called with `new` using `new.target`, empty for regular calls and equals the function if called with `new`
+
+```javascript
+function User(name) {
+  if (!new.target) {
+    return new User(name);
+  }
+  this.name = name;
+}
+let john = User('John');
+console.log(john.name); // John
+```
+
+- in constructor function, `return` called with object, the object is returned, if `return`, called with primitive, its ignored
+- `methods` can also be added to `this`
+
+```javascript
+function User(name) {
+  this.name = name;
+  this.sayHi = function () {
+    console.log(this.name);
+  };
+}
+let john = new User('John');
+john.sayHi(); // John
+```
+
+### Optional chaining `?.`
+
+- optional chaining `?.` is an error-proof way to access nested objects.
+
+```javascript
+let user = null;
+console.log(user?.address.street); // undefined and no error
+```
+
+- short circuting
+
+```javascript
+let user = null;
+let x = 0;
+user?.sayHi(x++); // nothing happens
+console.log(x); // 0, value not incremented
+```
+
+- value before `?.` must exist.
+
+```javascript
+delete user?.name; // delete user.name if user exists.
+```
+
+- `?.` checks if the left part is `null/undefined`
+
+### Symbols
+
+- Symbol is a primitive type for unique identifiers.
+- Symbols are created with Symbol() call with an optional description (name).
+- Symbols are always different values, even if they have the same name.
+- If we want same-named symbols to be equal, then we should use the global registry: `Symbol.for(key)` returns (creates if needed) a global symbol with key as the name. Multiple calls of `Symbol.for` with the same key return exactly the same symbol.
+
+- Symbol usecase, hidden properties, symbolic property does not appear in `for..in`
+- System symbols using `Symbol.*`, can be used to alter built in behaviors.
+- Symbols can be displayed using `Object.getOwnPropertySymbols(obj)`, also Reflect.ownKeys(obj) returns all keys including symbols
+
+### Object to primitive conversion
+
+- what happens when objects are added subtracted or printed
+- All objects are true in boolean context, there are only numeric and string conversion,
+- numberic when we add or subtract or other mathematical functions.
+- string conversions in case of displaying object
+
+- fine tune string and numeric conversions using special object methods
+- three variants of type conversions so called as `hints` in the specification - `string`, `number`, `default`(in case of uncertainity) eg: + can be used for addition and concat as well, so for object addition the hint is `default`.
+- to do the conversion, JS tries to find and call the three object methods
+  -- obj[Symbol.toPrimitive](hint)
+  -- if hint is `string`, obj.toString() and obj.valueOf()
+  -- if hint is `number`, obj.valueOf() and obj.toString()
+
+```javascript
+let user = {
+  name: 'John',
+  money: 1000,
+  [Symbol.toPrimitive](hint) {
+    console.log(hint);
+    return hint === 'string' ? this.name : this.money;
+  }
+};
+
+console.log(user); // John
+console.log(+user); // 1000
+console.log(user + 500); // 1500
+```
+
+- If there’s no `Symbol.toPrimitive` then JavaScript tries to find them and try in the order:
+- toString -> valueOf for `string` hint.
+- valueOf -> toString otherwise.
+
+```javascript
+let user = { name: 'John' };
+alert(user); //[object Object]
+alert(user.valueOf() === user); //true
+```
+
+```javascript
+let user= {
+  name: 'John',
+  money: 1000,
+  // for hint == 'string'
+  toString(){
+    return this.name;
+  }
+  // for hint == 'number' or default
+  valueOf(){
+    return this.money
+  }
+}
+
+alert(user); // toString -> John
+alert(+user); // valueOf -> 1000
+alert(user+ 500); // valueOf -> 1500
+```
+
+- toString and valueOf must return a primitive (no error but will be ignored, Symbol.toPrimitive, will throw error is no primitive is returned)
