@@ -747,3 +747,397 @@ const styles = StyleSheet.create({
 - the heart of building react native apps: components (builtin and custom components) + layout and styling (custom fonts etc.) + native API modules (later point)
 - will cover component + layout and styling (images and custom fonts)
 - an application, with a header (Guess a number), starting screen with input with button confirm and reset, button to start a screen with the same header, computer guessed number, suggest lower or greater, alert for cheat(:P if wrong hint was given), summary screen , restart game button etc.
+
+#### Adding a custom header
+
+```javascript
+// components/Header.js
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+const Header = props => {
+  return (
+    <View style={styles.header}>
+      <Text style={styles.headerTitle}>{props.title}</Text>
+    </View>
+  );
+};
+const styles = StryleSheet.create({
+  header: {
+    width: '100%',
+    height: 90,
+    paddingTop: 60,
+    backgroundColor: '#f7287b',
+    alignItems: 'center',
+    justifyContext: 'center'
+  },
+  headerTitle: {
+    color: 'black',
+    fontSize: 18
+  }
+});
+export default Header;
+
+// App.js
+import React from 'react';
+import { View } from 'react-native';
+import Header from './components/Header';
+
+export default function App() {
+  return (
+    <View style={styles.screen}>
+      <Header title='Guess a number' />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1
+  }
+});
+```
+
+- screen component, similar to pages in react web
+
+```javascript
+// screens/StartGameScreen.js
+import React from 'react';
+import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
+
+const StartGameScreen = props => {
+  return (
+    <View style={styles.screen}>
+      <Text style={styles.title}>Start a new game</Text>
+      <View style={styles.inputContainer}>
+        <Text>Select a number</Text>
+        <TextInput />
+        <View style={styles.buttonContainer}>
+          <Button title='Reset' onPress={()=>{}}/>
+          <Button title='Confirm' onPress={()=>{}}/>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1, // take all space, below the header
+    padding: 10,
+    alignItems: 'center'
+  },
+  title:{
+    fontSize: 20,
+    marginVertical: 10,
+
+  },
+  inputContainer:{
+    width: 300,
+    maxWidth: '80%',
+    alignItems: 'center',
+    shadowColor: 'black',
+    shadowOffset:{
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 6,
+    shadowOpacity: 0.26,
+    backgroundColor: 'white',
+    elevation: 8, // only on adroid, shadowProp work only in ios
+    padding: 20,
+    borderRadius: 10
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    width:'100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15;
+  }
+});
+export default StartGameScreen;
+
+// App.js
+import React from 'react';
+import { View } from 'react-native';
+import Header from './components/Header';
+import StartGameScreen from './screens/StartGameScreen';
+
+export default function App() {
+  return (
+    <View style={styles.screen}>
+      <Header title='Guess a number' />
+      <StartGameScreen />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1
+  }
+});
+```
+
+- extracting card component (presentational component)
+
+```javascript
+// components/Card
+import React from 'react';
+import {View} from 'react-native';
+
+const Card =(props) => {
+  return (
+    <View style={{...styles.card, ...props.style}}>
+      {props.children}
+    </View>
+  )
+}
+const styles = StyleSheet.create({
+  card:{
+    shadowColor: 'black',
+    shadowOffset:{
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 6,
+    shadowOpacity: 0.26,
+    backgroundColor: 'white',
+    elevation: 8, // only on adroid, shadowProp work only in ios
+    padding: 20,
+    borderRadius: 10
+  },
+})
+
+export default Card;
+
+
+// screens/StartGameScreen.js
+import React from 'react';
+import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
+import Card from './components/Card'
+
+const StartGameScreen = props => {
+  return (
+    <View style={styles.screen}>
+      <Text style={styles.title}>Start a new game</Text>
+      <Card style={styles.inputContainer}>
+        <Text>Select a number</Text>
+        <TextInput />
+        <View style={styles.buttonContainer}>
+          <Button title='Reset' onPress={()=>{}}/>
+          <Button title='Confirm' onPress={()=>{}}/>
+        </View>
+      </Card>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1, // take all space, below the header
+    padding: 10,
+    alignItems: 'center'
+  },
+  title:{
+    fontSize: 20,
+    marginVertical: 10,
+
+  },
+  inputContainer:{
+    width: 300,
+    maxWidth: '80%',
+    alignItems: 'center'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    width:'100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15;
+  }
+});
+export default StartGameScreen;
+
+```
+
+- color theming with constants
+
+```javascript
+// screens/StartGameScreen.js
+import React from 'react';
+import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
+import Card from './components/Card'
+import Colors from './constant/colors';
+
+const StartGameScreen = props => {
+  return (
+    <View style={styles.screen}>
+      <Text style={styles.title}>Start a new game</Text>
+      <Card style={styles.inputContainer}>
+        <Text>Select a number</Text>
+        <TextInput />
+        <View style={styles.buttonContainer}>
+          <View style={styles.button}>
+            <Button title='Reset' onPress={()=>{}} color={Colors.accent}/>
+          </View>
+          <View style={styles.button}>
+            <Button title='Confirm' onPress={()=>{}} color={Color.primary}/>
+          </View>
+        </View>
+      </Card>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1, // take all space, below the header
+    padding: 10,
+    alignItems: 'center'
+  },
+  title:{
+    fontSize: 20,
+    marginVertical: 10,
+
+  },
+  inputContainer:{
+    width: 300,
+    maxWidth: '80%',
+    alignItems: 'center'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    width:'100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15;
+  },
+  button:{
+    width: 100
+  }
+
+});
+export default StartGameScreen;
+```
+
+- themeing with constants
+
+```javascript
+// constants/colors
+export default {
+  primary: '#f7287b',
+  accent: '#c717fc'
+};
+```
+
+- styling input field
+
+```javascript
+// components/Input.js
+
+import React from 'react';
+import { TextInput, StyleSheet } from 'react-native';
+const Input = props => {
+  return <TextInput {...props} style={{ ...styles.input, ...props.style }} />;
+};
+
+const styles = StyleSheet.create({
+  input: {
+    height: 30,
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
+    marginVertical: 10
+  }
+});
+export default Input;
+```
+
+```javascript
+// screens/StartGameScreen.js
+import React, { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  Button,
+  TouchableWithoutFeedback,
+  keyboard
+} from 'react-native';
+import Card from './components/Card';
+import Colors from './constant/colors';
+import Input from './components/Input';
+
+const StartGameScreen = props => {
+  const [enteredValue, setEneteredValue] = useState('');
+  const numberInputHandler = inpuText => {
+    setEneteredValue(inpuText.replace(/[^0-9]/g, ''));
+  };
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        keyboard.dismiss();
+      }}
+    >
+      <View style={styles.screen}>
+        <Text style={styles.title}>Start a new game</Text>
+        <Card style={styles.inputContainer}>
+          <Text>Select a number</Text>
+          <Input
+            style={styles.input}
+            blurOnSubmit
+            autoCorrect={false}
+            autoCapitalize='none'
+            keyBoardType='number-pad'
+            maxLength={2}
+            onChangeText={numberInputHandler}
+            value={enteredValue}
+          />
+          <View style={styles.buttonContainer}>
+            <View style={styles.button}>
+              <Button title='Reset' onPress={() => {}} color={Colors.accent} />
+            </View>
+            <View style={styles.button}>
+              <Button
+                title='Confirm'
+                onPress={() => {}}
+                color={Color.primary}
+              />
+            </View>
+          </View>
+        </Card>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1, // take all space, below the header
+    padding: 10,
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 20,
+    marginVertical: 10
+  },
+  inputContainer: {
+    width: 300,
+    maxWidth: '80%',
+    alignItems: 'center'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15
+  },
+  button: {
+    width: 100
+  },
+  input: {
+    width: 50,
+    textAlign: 'center'
+  }
+});
+export default StartGameScreen;
+```
