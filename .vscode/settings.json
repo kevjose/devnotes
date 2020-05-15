@@ -18,5 +18,6 @@
     "statusBar.border": "#215732",
     "titleBar.border": "#215732"
   },
-  "peacock.color": "#215732"
+  "peacock.color": "#215732",
+  "editor.fontLigatures": null
 }

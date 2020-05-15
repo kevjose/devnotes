@@ -1029,7 +1029,7 @@ export default {
 };
 ```
 
-- styling input field
+- styling input field, keyboard dismiss
 
 ```javascript
 // components/Input.js
@@ -1140,4 +1140,186 @@ const styles = StyleSheet.create({
   }
 });
 export default StartGameScreen;
+```
+
+- Resetting and confirming user input
+
+```javascript
+import {Keybord, Alert} from 'react-native';
+const StartGameScreen = props => {
+  const [enteredValue, setEneteredValue] = useState('');
+  const [confirmed, setConfirmed] = useState(false);
+  const [selectedNumber, setSelectedNumber] = useState();
+  const numberInputHandler = inpuText => {
+    setEneteredValue(inpuText.replace(/[^0-9]/g, ''));
+  }
+  const resetInputHandler = () => {
+    setEneteredValue('');
+    setConfirmed(false);
+  }
+  const confirmInputHandler = () = {
+    const chosenNumber = parseInt(enteredValue);
+    if(isNaN(chosenNumber) || chosenNumber <=0 || chosenNumber >90){
+      Alert.alert('Invalid number', 'Number should be between 1 and 99',[{text: 'Okay', style:'destructive', onPress:resetInputHandler}])
+      return;
+    }
+    setConfirmed(true);
+    setSelectedNumber(parseInt(enteredValue));
+    setEneteredValue('');
+    Keyboard.dismiss();
+  }
+  if(confirmed){
+    confirmedOutput = (
+      <Card style={styles.summaryContainer}>
+        <Text>You Selected</Text>
+        <View style={styles.numberContainer}>
+          <Text style={styles.number}>{selectedNumber}</Text>
+          <Button  title='Start game'/>
+        </View>
+      </Card>
+  }
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        keyboard.dismiss();
+      }}
+    >
+      <View style={styles.screen}>
+        <Text style={styles.title}>Start a new game</Text>
+        <Card style={styles.inputContainer}>
+          <Text>Select a number</Text>
+          <Input
+            style={styles.input}
+            blurOnSubmit
+            autoCorrect={false}
+            autoCapitalize='none'
+            keyBoardType='number-pad'
+            maxLength={2}
+            onChangeText={numberInputHandler}
+            value={enteredValue}
+          />
+          <View style={styles.buttonContainer}>
+            <View style={styles.button}>
+              <Button
+                title='Reset'
+                onPress={resetInputHandler}
+                color={Colors.accent}
+              />
+            </View>
+            <View style={styles.button}>
+              <Button
+                title='Confirm'
+                onPress={() => {}}
+                color={Color.primary}
+              />
+            </View>
+          </View>
+        </Card>
+        {confirmedOutput}
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1, // take all space, below the header
+    padding: 10,
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 20,
+    marginVertical: 10
+  },
+  inputContainer: {
+    width: 300,
+    maxWidth: '80%',
+    alignItems: 'center'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15
+  },
+  button: {
+    width: 100
+  },
+  input: {
+    width: 50,
+    textAlign: 'center'
+  },
+  summaryContainer:{
+    marginTop: 20,
+    alignItem: 'center'
+  },
+  numberContainer:{
+    borderWidth: 2,
+    borderColor: Colors.acsent,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    alignItem: 'center',
+    justify: 'center',
+  },
+  number: {
+    fontSize: 22,
+    color: Colors.acsent
+  }
+});
+export default StartGameScreen;
+```
+
+- adding random number generation, switching screens;
+
+```javascript
+// makng the start game work
+// screens/GameScreen.js
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import NumberContainer from '../components/NumberContainer';
+import Card from '../components/Card';
+
+const generateRandomBetween = (min, max, exclude) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  const rndNum = Math.floor(Math.random() * (max - min)) + min;
+  if (rndNum === exclude) {
+    return generateRandomBetween(min, max, exclude);
+  } else {
+    return rndNum;
+  }
+};
+
+const GameScreen = props => {
+  const [currentGuess, setCurrentGuess] = useState(
+    generateRandomBetween(1, 100, props.userChoice)
+  );
+  return (
+    <View style={styles.screen}>
+      <Text> Opponent's guess</Text>
+      <NumberContainer>{currentGuess}</NumberContainer>
+      <Card style={style.buttonContainer}>
+        <Button title='Lower' onPress={() => {}} />
+        <Button title='Higher' onPress={() => {}} />
+      </Card>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    padding: 10,
+    alignItems: 'center'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+    width: 300,
+    maxWidth: '80%'
+  }
+});
+export default GameScreen;
 ```
