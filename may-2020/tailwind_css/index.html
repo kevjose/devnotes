@@ -5,9 +5,19 @@
       rel="stylesheet"
     />
   </head>
-  <body>
-    <div class="bg-gray-2 00">Text</div>
-    <div class="bg-white">Body</div>
-    <div class="bg-blue-800">Footer</div>
+  <body
+    class="h-screen flex flex-col justify-center items-start pl-10 w-1/3 bg-gray-300"
+  >
+    <label class="text-gray-700 text-sm font-bold select-none" for="full_name">
+      Full Name
+    </label>
+    <input
+      id="full_name"
+      placeholder="Enter your full name"
+      class="mt-2 shadow border rounded-lg w-4/6 px-3 py-2 text-gray-700 focus:shadow-outline focus:bg-blue-100 placeholder-indigo-300"
+    />
+    <button class="mt-2 px-3 py-2 bg-blue-900 text-blue-100 rounded-lg">
+      Save
+    </button>
   </body>
 </html>
