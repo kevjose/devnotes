@@ -54,7 +54,7 @@ const SearchFilters = () => {
             <div className='-mx-2 flex flex-wrap'>
               <label className='block w-1/2 px-2 sm:w-1/4 lg:w-1/2'>
                 <span className='text-sm font-semibold text-gray-500'>
-                  Bedrooms
+                  Title
                 </span>
                 <select className='mt-1 block w-full focus:text-white text-gray-900 shadow focus:bg-gray-600 h-8 outline-none'>
                   <option></option>
@@ -63,7 +63,7 @@ const SearchFilters = () => {
               </label>
               <label className='block w-1/2 px-2 sm:w-1/4 lg:w-1/2'>
                 <span className='text-sm font-semibold text-gray-500'>
-                  Bathrooms
+                  Title
                 </span>
                 <select className='mt-1 block w-full focus:text-white text-gray-900 shadow focus:bg-gray-600 h-8 outline-none'>
                   <option></option>
@@ -73,7 +73,7 @@ const SearchFilters = () => {
               </label>
               <label className='mt-4 lg:mt-4 sm:mt-0 block w-full px-2 sm:w-1/2 lg:w-full'>
                 <span className='text-sm font-semibold text-gray-500'>
-                  Price range
+                  Title
                 </span>
                 <select className='mt-1 block w-full focus:text-white text-gray-900 shadow focus:bg-gray-600 h-8 outline-none'>
                   <option></option>
@@ -88,29 +88,29 @@ const SearchFilters = () => {
             </span>
             <div className='sm:flex sm:-mx-2 lg:block lg:mx-0'>
               <Radio
-                content={'House'}
-                value={'house'}
+                content={'A'}
+                value={'a'}
                 name={'propertyType'}
                 color='white'
                 background='gray'
               />
               <Radio
-                content={'Apartment'}
-                value={'apartment'}
+                content={'B'}
+                value={'b'}
                 name={'propertyType'}
                 color='white'
                 background='gray'
               />
               <Radio
-                content={'Loft'}
-                value={'loft'}
+                content={'C'}
+                value={'c'}
                 name={'propertyType'}
                 color='white'
                 background='gray'
               />
               <Radio
-                content={'Townhouse'}
-                value={'townhouse'}
+                content={'D'}
+                value={'d'}
                 name={'propertyType'}
                 color='white'
                 background='gray'
@@ -119,48 +119,48 @@ const SearchFilters = () => {
           </div>
           <div className='px-4 py-4 border-t border-gray-900 lg:w-1/3 border xl:w-full'>
             <span className='block text-sm font-semibold text-gray-500'>
-              Amenities
+              Property name
             </span>
             <div className='sm:flex sm:-mx-2 sm:flex-wrap'>
               <Checkbox
-                name={'balcony'}
-                content={'Balcony'}
+                name={'a'}
+                content={'A'}
                 color='white'
                 background='gray'
               />
               <Checkbox
-                name={'pool'}
-                content={'Pool'}
+                name={'b'}
+                content={'B'}
                 color='white'
                 background='gray'
               />
               <Checkbox
-                name={'beach'}
-                content={'Beach'}
+                name={'c'}
+                content={'C'}
                 color='white'
                 background='gray'
               />
               <Checkbox
-                name={'petFriendly'}
-                content={'Pet friendly'}
+                name={'d'}
+                content={'D'}
                 color='white'
                 background='gray'
               />
               <Checkbox
-                name={'kidFriendly'}
-                content={'Kid friendly'}
+                name={'e'}
+                content={'E'}
                 color='white'
                 background='gray'
               />
               <Checkbox
-                name={'parking'}
-                content={'Parking'}
+                name={'f'}
+                content={'F'}
                 color='white'
                 background='gray'
               />
               <Checkbox
-                name={'airConditioning'}
-                content={'Air Conditioning'}
+                name={'g'}
+                content={'G'}
                 color='white'
                 background='gray'
               />
@@ -169,9 +169,9 @@ const SearchFilters = () => {
         </div>
         <div className='bg-gray-900 px-4 py-4 sm:text-right'>
           <button
-            className={`block w-full sm:w-auto sm:inline-block bg-indigo-500 hover:bg-indigo-400 font-semibold text-white px-4 py-2 rounded-lg xl:block xl:w-full`}
+            className={`block w-full sm:w-auto sm:inline-block bg-indigo-800 hover:bg-indigo-400 font-semibold text-white px-4 py-2 rounded-lg xl:block xl:w-full`}
           >
-            Update
+            Filter out
           </button>
         </div>
       </form>
