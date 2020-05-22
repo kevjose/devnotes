@@ -5,7 +5,7 @@ import SideNav from './components/SideNav';
 
 function App() {
   return (
-    <div className='min-h-screen bg-gray-200 antialiased xl:flex xl:flex-col xl:h-screen'>
+    <div className='min-h-screen bg-gray-300 antialiased xl:flex xl:flex-col xl:h-screen'>
       <SiteHeader className='xl:flex-shrink-0' />
       <div className='xl:flex-1 xl:flex xl:overflow-y-hidden'>
         <SideNav />

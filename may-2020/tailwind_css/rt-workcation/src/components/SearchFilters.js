@@ -169,7 +169,7 @@ const SearchFilters = () => {
         </div>
         <div className='bg-gray-900 px-4 py-4 sm:text-right'>
           <button
-            className={`block w-full sm:w-auto sm:inline-block bg-indigo-800 hover:bg-indigo-400 font-semibold text-white px-4 py-2 rounded-lg xl:block xl:w-full`}
+            className={`block w-full sm:w-auto sm:inline-block bg-blue-800 hover:bg-blue-700 font-semibold text-white px-4 py-2 rounded-lg xl:block xl:w-full`}
           >
             Filter out
           </button>
