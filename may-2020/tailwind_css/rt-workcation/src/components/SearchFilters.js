@@ -221,7 +221,7 @@ const SearchFilters = () => {
             <button
               className={`block w-full sm:w-auto sm:inline-block bg-blue-800 hover:bg-blue-700 font-semibold text-white px-4 py-2 rounded-lg xl:block xl:w-full`}
             >
-              Filter out
+              Save
             </button>
           </div>
         </form>
