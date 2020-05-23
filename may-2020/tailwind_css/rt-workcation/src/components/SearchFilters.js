@@ -171,13 +171,6 @@ const SearchFilters = () => {
               </div>
             </div>
           </div>
-          <div className='bg-gray-900 px-4 py-4 sm:text-right'>
-            <button
-              className={`block w-full sm:w-auto sm:inline-block bg-blue-800 hover:bg-blue-700 font-semibold text-white px-4 py-2 rounded-lg xl:block xl:w-full`}
-            >
-              Save
-            </button>
-          </div>
         </form>
       </div>
       {/* Tabbed section end */}
