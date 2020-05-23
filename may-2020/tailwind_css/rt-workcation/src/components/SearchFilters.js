@@ -9,6 +9,7 @@ import {
 
 const SearchFilters = () => {
   const [isOpen, setOpen] = useToogle(false);
+  const [showBasicProfile, setShowBasicProfile] = useToogle(true);
   const [openTab, setOpenTab] = useState(1);
 
   const { state, dispatch } = useResumeContext();
@@ -157,9 +158,15 @@ const SearchFilters = () => {
         >
           <div className='lg:flex xl:block'>
             <div className='px-4 py-4 border-t border-gray-900 lg:w-1/3 border xl:w-full'>
-              <h3 className='text-xl text-bold text-gray-500'>Basic profile</h3>
+              <h3
+                className='text-xl text-bold text-gray-500 cursor-pointer'
+                onClick={() => setShowBasicProfile(o => !o)}
+              >
+                Basic profile
+              </h3>
               <div className='flex flex-col flex-wrap'>
-                {renderBaiscProfile(state.resume.basics, 'resume.basics')}
+                {showBasicProfile &&
+                  renderBaiscProfile(state.resume.basics, 'resume.basics')}
               </div>
             </div>
           </div>
