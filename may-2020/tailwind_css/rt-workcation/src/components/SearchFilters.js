@@ -159,10 +159,11 @@ const SearchFilters = () => {
           <div className='lg:flex xl:block'>
             <div className='px-4 py-4 border-t border-gray-900 lg:w-1/3 border xl:w-full'>
               <h3
-                className='text-xl text-bold text-gray-500 cursor-pointer'
+                className='text-xl text-bold text-gray-500 cursor-pointer select-none'
                 onClick={() => setShowBasicProfile(o => !o)}
               >
-                Basic profile
+                {showBasicProfile ? <>&#8595;</> : <>&#8594;</>} &nbsp; Basic
+                profile
               </h3>
               <div className='flex flex-col flex-wrap'>
                 {showBasicProfile &&
