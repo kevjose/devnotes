@@ -13,7 +13,8 @@ const initialState = {
       label: 'Basic Information',
       name: 'John Doe',
       designation: 'Programmer',
-      picture: '',
+      picture:
+        'https://www.fetchland.com/wp-content/uploads/2016/04/Zach-Woods-300x225.png',
       email: 'john@gmail.com',
       phone: '(912) 555-4321',
       website: 'http://johndoe.com',
