@@ -17,9 +17,7 @@ const Resume = () => {
             alt='display pic'
           />
           <div>
-            <h1 className='font-bold text-4xl text-gray-600'>
-              {basic_profile.name}
-            </h1>
+            <h1 className='font-bold text-2xl'>{basic_profile.name}</h1>
             <h6 className='font-medium text-sm'>{basic_profile.designation}</h6>
             <div className='flex flex-col mt-4 text-xs'>
               <span>{basic_profile.location.address}</span>

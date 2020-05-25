@@ -65,7 +65,7 @@ const SearchFilters = () => {
     });
   };
   return (
-    <section className='bg-gray-800 xl:w-1/4 xl:h-full'>
+    <section className='bg-gray-800 xl:w-1/4 xl:h-full xl:flex-shrink-0'>
       <div className='flex justify-between px-4 py-3 xl:hidden'>
         <div className='relative max-w-xs w-full'>
           <div className='absolute inset-y-0 left-0 flex items-center pl-3'>
