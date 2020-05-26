@@ -60,7 +60,7 @@ const SearchFilters = () => {
             if (typeof item === 'object')
               return (
                 <React.Fragment key={`${path}.${index}`}>
-                  <div className='border border-gray-400 mx-2 mb-2'>
+                  <div className='border border-gray-400 mx-2 mb-2 rounded'>
                     <p className='pl-2 pt-2 text-gray-200 font-semibold text-xs'>
                       {index + 1}.
                     </p>
