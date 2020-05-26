@@ -85,7 +85,7 @@ const SearchFilters = () => {
         return (
           <React.Fragment key={`${path}.${item}`}>
             <label className='block px-3 py-3'>
-              <div className='text-xl font-semibold text-gray-500 capitalize'>
+              <div className='text-sm font-semibold text-gray-500 capitalize'>
                 {item}
               </div>
               <hr />
@@ -96,7 +96,7 @@ const SearchFilters = () => {
       }
       return (
         <label className='block px-2 py-2' key={`${path}.${item}`}>
-          <div className='text-sm font-semibold text-gray-500 py-1 capitalize'>
+          <div className='text-xs font-semibold text-gray-500 py-1 capitalize'>
             {item}
           </div>
           <input
@@ -204,7 +204,7 @@ const SearchFilters = () => {
           <div className='lg:flex xl:block'>
             <div className='px-4 py-4 border-t border-gray-900 lg:w-1/3 border xl:w-full'>
               <h3
-                className='text-xl text-bold text-gray-500 cursor-pointer select-none'
+                className='text-sm text-bold text-gray-500 cursor-pointer select-none'
                 onClick={() => setShowBasicProfile(o => !o)}
               >
                 {showBasicProfile ? <>&#8595;</> : <>&#8594;</>} &nbsp; Basic
@@ -218,7 +218,7 @@ const SearchFilters = () => {
 
             <div className='px-4 py-4 border-t border-gray-900 lg:w-1/3 border xl:w-full'>
               <h3
-                className='text-xl text-bold text-gray-500 cursor-pointer select-none'
+                className='text-sm text-bold text-gray-500 cursor-pointer select-none'
                 onClick={() => setShowWork(o => !o)}
               >
                 {showWork ? <>&#8595;</> : <>&#8594;</>} &nbsp; Work Experience
