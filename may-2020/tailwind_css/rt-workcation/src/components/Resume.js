@@ -4,6 +4,7 @@ import { useResumeContext } from '../contexts/ResumeContext';
 const Resume = () => {
   const { state } = useResumeContext();
   const basic_profile = state.resume.basics;
+  const work = state.resume.work;
   return (
     <div
       className='p-10 w-full bg-white border antialiased overflow-y-auto'
@@ -77,9 +78,7 @@ const Resume = () => {
       </div>
 
       <div>
-        <h6 className='text-xs font-bold uppercase mt-6 mb-2'>
-          Work Experience
-        </h6>
+        <h6 className='text-xs font-bold uppercase mt-6 mb-2'>{work.label}</h6>
         <div className='mt-3'>
           <div className='flex justify-between'>
             <div>

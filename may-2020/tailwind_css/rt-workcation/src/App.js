@@ -4,6 +4,7 @@ import SiteFilters from './components/SearchFilters';
 import SideNav from './components/SideNav';
 import Resume from './components/Resume';
 import { ResumeProvider } from './contexts/ResumeContext';
+// import Kanban from './components/Kanban';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         </ResumeProvider>
       </div>
     </div>
+    // <Kanban />
   );
 }
 

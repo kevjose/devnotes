@@ -4,12 +4,14 @@ import {
   useResumeContext,
   SAVE_TO_LOCAL_STORAGE,
   INPUT_CHANGE,
-  LOAD_FROM_LOCAL_STORAGE
+  LOAD_FROM_LOCAL_STORAGE,
+  ADD_ITEM
 } from '../contexts/ResumeContext';
 
 const SearchFilters = () => {
   const [isOpen, setOpen] = useToogle(false);
-  const [showBasicProfile, setShowBasicProfile] = useToogle(true);
+  const [showBasicProfile, setShowBasicProfile] = useToogle(false);
+  const [showWork, setShowWork] = useToogle(true);
   const [openTab, setOpenTab] = useState(1);
 
   const { state, dispatch } = useResumeContext();
@@ -34,7 +36,50 @@ const SearchFilters = () => {
     });
   };
 
+  const handleAddItem = (key, value) => {
+    console.log(key, value);
+    dispatch({
+      type: ADD_ITEM,
+      payload: {
+        key,
+        value
+      }
+    });
+
+    // dispatch({
+    //   type: SAVE_TO_LOCAL_STORAGE
+    // });
+  };
+
   const renderBaiscProfile = (data, path) => {
+    if (Array.isArray(data) && typeof data[0] == 'object') {
+      const addBlock = data[0];
+      return (
+        <React.Fragment>
+          {data.map((item, index) => {
+            if (typeof item === 'object')
+              return (
+                <React.Fragment key={`${path}.${index}`}>
+                  <div className='border border-gray-400 mx-2 mb-2'>
+                    <p className='pl-2 pt-2 text-gray-200 font-semibold text-xs'>
+                      {index + 1}.
+                    </p>
+                    {renderBaiscProfile(item, `${path}.${index}`)}
+                  </div>
+                </React.Fragment>
+              );
+            else return null;
+          })}
+          <button
+            className='text-gray-100 bg-transparent border border-solid border-gray-200 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mx-2 my-2'
+            type='button'
+            onClick={() => handleAddItem(path, addBlock)}
+          >
+            Add
+          </button>
+        </React.Fragment>
+      );
+    }
     return Object.keys(data).map(item => {
       if (typeof data[item] === 'object') {
         return (
@@ -55,7 +100,7 @@ const SearchFilters = () => {
             {item}
           </div>
           <input
-            className='px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full'
+            className='px-1 py-1 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-xs shadow outline-none focus:outline-none focus:shadow-outline w-full'
             type='text'
             onChange={e => handleChange(`${path}.${item}`, e.target.value)}
             value={data[item]}
@@ -168,6 +213,19 @@ const SearchFilters = () => {
               <div className='flex flex-col flex-wrap'>
                 {showBasicProfile &&
                   renderBaiscProfile(state.resume.basics, 'resume.basics')}
+              </div>
+            </div>
+
+            <div className='px-4 py-4 border-t border-gray-900 lg:w-1/3 border xl:w-full'>
+              <h3
+                className='text-xl text-bold text-gray-500 cursor-pointer select-none'
+                onClick={() => setShowWork(o => !o)}
+              >
+                {showWork ? <>&#8595;</> : <>&#8594;</>} &nbsp; Work Experience
+              </h3>
+              <div className='flex flex-col flex-wrap'>
+                {showWork &&
+                  renderBaiscProfile(state.resume.work, 'resume.work')}
               </div>
             </div>
           </div>
