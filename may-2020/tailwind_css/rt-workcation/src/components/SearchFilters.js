@@ -74,7 +74,7 @@ const SearchFilters = () => {
             if (typeof item === 'object')
               return (
                 <React.Fragment key={`${path}.${index}`}>
-                  <div className='border border-gray-400 mx-2 mb-2 rounded'>
+                  <div className='border border-gray-600 mx-2 mb-2 rounded'>
                     <p className='px-2 pt-2 text-gray-200 font-semibold text-xs flex justify-between'>
                       {index + 1}.{' '}
                       <span
@@ -91,7 +91,7 @@ const SearchFilters = () => {
             else return null;
           })}
           <button
-            className='text-gray-100 bg-transparent border border-solid border-gray-200 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mx-2 my-2'
+            className='text-gray-100 bg-transparent border border-solid border-gray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mx-2 my-2'
             type='button'
             onClick={() => handleAddItem(path, addBlock)}
           >
@@ -108,7 +108,7 @@ const SearchFilters = () => {
               <div className='text-sm font-semibold text-gray-500 capitalize'>
                 {item}
               </div>
-              <hr />
+              <hr className='border-gray-600' />
             </label>
             {renderBaiscProfile(data[item], `${path}.${item}`)}
           </React.Fragment>
