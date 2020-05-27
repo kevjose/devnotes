@@ -63,7 +63,7 @@ const SiteHeader = () => {
             </svg>
           </div>
           <input
-            className='block w-full border border-transparent bg-gray-200 focus:outline-non focus:bg-white focus:border-gray-300 text-gray-900 rounded-lg pl-10 pr-4 py-2'
+            className='block w-full border border-transparent bg-gray-200 focus:outline-none focus:bg-white focus:border-gray-300 text-gray-900 rounded-lg pl-10 pr-4 py-2 shadow'
             placeholder='Search by keywords'
           />
         </div>
