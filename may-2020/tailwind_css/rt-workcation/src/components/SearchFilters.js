@@ -120,7 +120,7 @@ const SearchFilters = () => {
             {item}
           </div>
           <input
-            className='px-1 py-1 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-xs shadow outline-none focus:outline-none focus:shadow-outline w-full'
+            className='px-1 py-1 leading-loose placeholder-gray-400 text-white relative bg-gray-700 rounded text-xs shadow outline-none focus:outline-none w-full'
             type='text'
             onChange={e => handleChange(`${path}.${item}`, e.target.value)}
             value={data[item]}
