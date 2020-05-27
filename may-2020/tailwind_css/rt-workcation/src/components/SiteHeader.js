@@ -93,11 +93,11 @@ const SiteHeader = () => {
             <div className='flex items-center sm:hidden'>
               <img
                 className='h-10 w-10 object-cover rounded-full border-2 border-gray-600'
-                src='https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80'
+                src='https://images.unsplash.com/photo-1579038773867-044c48829161?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80'
                 alt=''
               />
               <span className='ml-4 font-semibold text-gray-200 sm:hidden'>
-                Jane doe
+                John doe
               </span>
             </div>
 
@@ -135,7 +135,7 @@ const SiteHeader = () => {
                 >
                   <img
                     className='h-full w-full object-cover'
-                    src='https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80'
+                    src='https://images.unsplash.com/photo-1579038773867-044c48829161?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80'
                     alt=''
                   />
                 </span>
