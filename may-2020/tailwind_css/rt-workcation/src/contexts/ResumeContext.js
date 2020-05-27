@@ -1,9 +1,10 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { set, get } from 'lodash';
+import { set, get, remove } from 'lodash';
 
 export const ResumeContext = createContext();
 export const INPUT_CHANGE = 'INPUT_CHANGE';
 export const ADD_ITEM = 'ADD_ITEM';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
 export const SAVE_TO_LOCAL_STORAGE = 'SAVE_TO_LOCAL_STORAGE';
 export const LOAD_FROM_LOCAL_STORAGE = 'LOAD_FROM_LOCAL_STORAGE';
 
@@ -46,20 +47,24 @@ const initialState = {
 };
 
 const ResumeReducer = (state, { type, payload }) => {
+  let items;
   switch (type) {
     case INPUT_CHANGE:
-      console.log(type, payload, set({ ...state }, payload.key, payload.value));
       return set({ ...state }, payload.key, payload.value);
     case ADD_ITEM:
-      let items = get({ ...state }, payload.key, []);
+      items = get({ ...state }, payload.key, []);
       let newItem = {};
       for (let i in payload.value) {
         newItem[i] = '';
       }
       items.push(newItem);
       return set({ ...state }, payload.key, items);
+    case REMOVE_ITEM:
+      items = get({ ...state }, payload.key, []);
+      remove(items, i => i === payload.value);
+      return set({ ...state }, payload.key, items);
     case SAVE_TO_LOCAL_STORAGE:
-      localStorage.setItem('state', JSON.stringify(state));
+      localStorage.setItem('state-1', JSON.stringify(state));
       return state;
     case LOAD_FROM_LOCAL_STORAGE:
       if (!payload) return state;

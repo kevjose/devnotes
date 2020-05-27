@@ -5,7 +5,8 @@ import {
   SAVE_TO_LOCAL_STORAGE,
   INPUT_CHANGE,
   LOAD_FROM_LOCAL_STORAGE,
-  ADD_ITEM
+  ADD_ITEM,
+  REMOVE_ITEM
 } from '../contexts/ResumeContext';
 
 const SearchFilters = () => {
@@ -17,12 +18,12 @@ const SearchFilters = () => {
   const { state, dispatch } = useResumeContext();
 
   useEffect(() => {
-    const localStoreResume = JSON.parse(localStorage.getItem('state'));
+    localStorage.removeItem('state');
+    const localStoreResume = JSON.parse(localStorage.getItem('state-1'));
     dispatch({ type: LOAD_FROM_LOCAL_STORAGE, payload: localStoreResume });
   }, [dispatch]);
 
   const handleChange = (key, value) => {
-    console.log(key, value);
     dispatch({
       type: INPUT_CHANGE,
       payload: {
@@ -37,7 +38,6 @@ const SearchFilters = () => {
   };
 
   const handleAddItem = (key, value) => {
-    console.log(key, value);
     dispatch({
       type: ADD_ITEM,
       payload: {
@@ -46,9 +46,23 @@ const SearchFilters = () => {
       }
     });
 
-    // dispatch({
-    //   type: SAVE_TO_LOCAL_STORAGE
-    // });
+    dispatch({
+      type: SAVE_TO_LOCAL_STORAGE
+    });
+  };
+
+  const handleRemoveItem = (key, value) => {
+    dispatch({
+      type: REMOVE_ITEM,
+      payload: {
+        key,
+        value
+      }
+    });
+
+    dispatch({
+      type: SAVE_TO_LOCAL_STORAGE
+    });
   };
 
   const renderBaiscProfile = (data, path) => {
@@ -61,8 +75,14 @@ const SearchFilters = () => {
               return (
                 <React.Fragment key={`${path}.${index}`}>
                   <div className='border border-gray-400 mx-2 mb-2 rounded'>
-                    <p className='pl-2 pt-2 text-gray-200 font-semibold text-xs'>
-                      {index + 1}.
+                    <p className='px-2 pt-2 text-gray-200 font-semibold text-xs flex justify-between'>
+                      {index + 1}.{' '}
+                      <span
+                        className='material-icons text-xl text-red-500 cursor-pointer'
+                        onClick={() => handleRemoveItem(path, item)}
+                      >
+                        remove_circle
+                      </span>
                     </p>
                     {renderBaiscProfile(item, `${path}.${index}`)}
                   </div>
