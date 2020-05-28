@@ -4,6 +4,7 @@ import SiteFilters from './components/SearchFilters';
 import SideNav from './components/SideNav';
 import Resume from './components/Resume';
 import { ResumeProvider } from './contexts/ResumeContext';
+import Joblist from './components/Joblist';
 // import Kanban from './components/Kanban';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <div className='xl:flex-1 xl:flex xl:overflow-y-hidden'>
         <ResumeProvider>
           <SideNav />
+          {/* <Joblist /> */}
           <SiteFilters />
           <Resume />
         </ResumeProvider>

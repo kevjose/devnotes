@@ -131,8 +131,8 @@ const SearchFilters = () => {
   };
   return (
     <section className='bg-gray-800 xl:w-1/4 xl:h-full xl:flex-shrink-0'>
-      <div className='flex justify-between px-4 py-3 xl:hidden'>
-        <div className='relative max-w-xs w-full'>
+      <div className='flex justify-end px-4 py-3 xl:hidden'>
+        {/* <div className='relative max-w-xs w-full'>
           <div className='absolute inset-y-0 left-0 flex items-center pl-3'>
             <svg
               className='h-6 w-6 fill-current text-gray-600'
@@ -147,10 +147,10 @@ const SearchFilters = () => {
             className='block w-full bg-gray-900 focus:outline-none focus:bg-white focus:text-gray-900 text-white rounded-lg pl-10 pr-4 py-2'
             placeholder='Search by keywords'
           />
-        </div>
+        </div> */}
         <button
           type='button'
-          className={`ml-4 inline-flex items-center hover:bg-gray-600 focus:outline-none focus:shadow-outline rounded-lg shadow pl-3 pr-4 ${
+          className={`ml-4 inline-flex items-center hover:bg-gray-600 focus:outline-none focus:shadow-outline rounded shadow pl-3 pr-4 py-2 ${
             isOpen ? 'bg-gray-600' : 'bg-gray-700'
           }`}
           onClick={() => setOpen(o => !o)}

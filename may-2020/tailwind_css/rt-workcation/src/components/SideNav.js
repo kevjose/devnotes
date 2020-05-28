@@ -7,7 +7,7 @@ const SideNav = () => {
     <section
       className={`bg-gray-900 ${
         isCollapsed ? 'xl:w-16' : 'xl:w-64'
-      } xl:h-full xl:overflow-y-auto`}
+      } xl:h-full xl:overflow-y-auto flex-shrink-0`}
     >
       <div className='flex px-4 py-3 xl:hidden'>
         <a
