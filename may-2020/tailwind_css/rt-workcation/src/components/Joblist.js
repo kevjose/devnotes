@@ -129,7 +129,7 @@ const Joblist = () => {
   console.log(jobs);
   return (
     <div className="bg-white flex flex-col w-full p-2 items-center">
-      <div className="h-full flex flex-col w-10/12">
+      <div className="h-full flex flex-col lg:w-10/12 w-full">
         <div className="w-full p-2 pt-24">
           <input
             className="focus:outline-none border border-gray-200 w-full rounded px-2 py-2 placeholder-gray-600 text-sm"

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import './assets/tailwind/tailwind.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
