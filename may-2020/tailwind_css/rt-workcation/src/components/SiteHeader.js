@@ -8,12 +8,12 @@ const SiteHeader = () => {
   const [focused, setFocus] = useState(false);
 
   return (
-    <header className='bg-gray-900 sm:flex sm:items-center sm:justify-between xl:bg-white'>
-      <div className='flex justify-between px-4 py-3 xl:w-64 xl:bg-gray-900 xl:justify-center xl:py-3'>
-        <div className='h-8 text-white w-full'>
-          <div className='flex justify-start text-gray-200'>
-            <span className='material-icons'>chevron_right</span>
-            <span className='font-bold text-lg -ml-2'>_</span>
+    <header className="bg-gray-900 sm:flex sm:items-center sm:justify-between xl:bg-white border-b shadow">
+      <div className="flex justify-between px-4 py-3 xl:w-64 xl:bg-white xl:justify-center xl:py-3">
+        <div className="h-8 text-white w-full">
+          <div className="flex justify-start text-gray-200">
+            <span className="material-icons">chevron_right</span>
+            <span className="font-bold text-lg -ml-2">_</span>
           </div>
 
           {/* <svg
@@ -24,27 +24,27 @@ const SiteHeader = () => {
           ></svg> */}
         </div>
 
-        <div className='flex sm:hidden'>
+        <div className="flex sm:hidden">
           <button
             onClick={toggleOpen}
-            type='button'
-            className='px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white'
+            type="button"
+            className="px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white"
           >
             <svg
-              className='h-6 w-6 fill-current'
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
+              className="h-6 w-6 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
             >
               {!isOpen ? (
                 <path
-                  fillRule='evenodd'
-                  clipRule='evenodd'
-                  d='M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z'
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"
                 />
               ) : (
                 <path
-                  fillRule='evenodd'
-                  d='M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z'
+                  fillRule="evenodd"
+                  d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
                 />
               )}
             </svg>
@@ -73,60 +73,60 @@ const SiteHeader = () => {
           />
         </div> */}
 
-        <div className='sm:flex sm:items-center'>
-          <div className='px-2 pt-2 pb-5 border-b border-gray-800 sm:flex sm:border-b-0 sm:py-0 sm:px-0'>
+        <div className="sm:flex sm:items-center">
+          <div className="px-2 pt-2 pb-5 border-b border-gray-800 sm:flex sm:border-b-0 sm:py-0 sm:px-0">
             <a
-              href='team'
-              className='block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:text-sm sm:px-2 xl:text-gray-900 xl:hover:bg-gray-200'
+              href="team"
+              className="block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:text-sm sm:px-2 xl:text-gray-900 xl:hover:bg-gray-200"
             >
               Team
             </a>
             <a
-              href='#projects'
-              className='mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900 xl:hover:bg-gray-200'
+              href="#projects"
+              className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900 xl:hover:bg-gray-200"
             >
               Projects
             </a>
             <a
-              href='#messages'
-              className='mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900 xl:hover:bg-gray-200'
+              href="#messages"
+              className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900 xl:hover:bg-gray-200"
             >
               Messages
             </a>
           </div>
-          <div className='relative px-5 py-5 sm:py-0 sm:ml-4 sm:px-0'>
-            <div className='flex items-center sm:hidden'>
+          <div className="relative px-5 py-5 sm:py-0 sm:ml-4 sm:px-0">
+            <div className="flex items-center sm:hidden">
               <img
-                className='h-10 w-10 object-cover rounded-full border-2 border-gray-600'
-                src='https://images.unsplash.com/photo-1579038773867-044c48829161?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80'
-                alt=''
+                className="h-10 w-10 object-cover rounded-full border-2 border-gray-600"
+                src="https://images.unsplash.com/photo-1579038773867-044c48829161?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80"
+                alt=""
               />
-              <span className='ml-4 font-semibold text-gray-200 sm:hidden'>
+              <span className="ml-4 font-semibold text-gray-200 sm:hidden">
                 John doe
               </span>
             </div>
 
-            <div className='mt-5 sm:hidden'>
+            <div className="mt-5 sm:hidden">
               <a
-                href='#account'
-                className='block text-gray-400 hover:text-white'
+                href="#account"
+                className="block text-gray-400 hover:text-white"
               >
                 Account settings
               </a>
               <a
-                href='#support'
-                className=' mt-3 block text-gray-400 hover:text-white'
+                href="#support"
+                className=" mt-3 block text-gray-400 hover:text-white"
               >
                 Support
               </a>
               <a
-                href='#sign-out'
-                className='mt-3 block text-gray-400 hover:text-white'
+                href="#sign-out"
+                className="mt-3 block text-gray-400 hover:text-white"
               >
                 Sign out
               </a>
             </div>
-            <div className='hidden sm:block'>
+            <div className="hidden sm:block">
               <DropdownButton
                 toggleAccountOpen={toggleAccountOpen}
                 setFocus={setFocus}
@@ -139,9 +139,9 @@ const SiteHeader = () => {
                   }`}
                 >
                   <img
-                    className='h-full w-full object-cover'
-                    src='https://images.unsplash.com/photo-1579038773867-044c48829161?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80'
-                    alt=''
+                    className="h-full w-full object-cover"
+                    src="https://images.unsplash.com/photo-1579038773867-044c48829161?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=144&h=144&q=80"
+                    alt=""
                   />
                 </span>
               </DropdownButton>
@@ -150,20 +150,20 @@ const SiteHeader = () => {
                 toggleAccountOpen={toggleAccountOpen}
               >
                 <a
-                  href='#account'
-                  className='block hover:text-white text-gray-800 px-4 py-2 hover:bg-indigo-500'
+                  href="#account"
+                  className="block hover:text-white text-gray-800 px-4 py-2 hover:bg-indigo-500"
                 >
                   Account settings
                 </a>
                 <a
-                  href='#support'
-                  className='block hover:text-white text-gray-800 mt-0 px-4 py-2 hover:bg-indigo-500'
+                  href="#support"
+                  className="block hover:text-white text-gray-800 mt-0 px-4 py-2 hover:bg-indigo-500"
                 >
                   Support
                 </a>
                 <a
-                  href='#sign-out'
-                  className='block hover:text-white text-gray-800 mt-0 px-4 py-2 hover:bg-indigo-500'
+                  href="#sign-out"
+                  className="block hover:text-white text-gray-800 mt-0 px-4 py-2 hover:bg-indigo-500"
                 >
                   Sign out
                 </a>
