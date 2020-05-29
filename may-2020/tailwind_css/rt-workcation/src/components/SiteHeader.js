@@ -3,7 +3,7 @@ import { Dropdown, DropdownButton } from './Dropdown';
 import useToogle from '../hooks/useToggle';
 
 const SiteHeader = () => {
-  const [isOpen, toggleOpen] = useToogle(false);
+  const [isOpen, toggleOpen] = useToogle(true);
   const [isAccountOpen, toggleAccountOpen] = useToogle(false);
   const [focused, setFocus] = useState(false);
 
